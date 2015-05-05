@@ -3,14 +3,14 @@ using System.Collections;
 
 public class Rules : MonoBehaviour 
 {
-	bool turn = true; //true is white
-	int[,] othello = new int[8,8]; //a matrix with 1,-1, and 0 for reference
-	GameObject white1;
-	GameObject black1;
-	Object[,] othe = new Object[8, 8]; //a matrix with gameobjects as a mirror. 
+	public bool turn = true; //true is white
+	public int[,] othello = new int[8,8]; //a matrix with 1,-1, and 0 for reference
+	public GameObject white1;
+	public GameObject black1;
+	public Object[,] othe = new Object[8, 8]; //a matrix with gameobjects as a mirror. 
 	//this is just here so that the gameobjects can be destroyed.  Use the other matrix
-	int color = 1;
-	ArrayList possible_moves = new ArrayList();
+	public int color = 1;
+	//ArrayList possible_moves = new ArrayList();
 
 	void Start () //SOME THINGS ARE UPSIDE DOWN, MAY OR MAY NOT NEED FIXING
 	{
@@ -39,9 +39,16 @@ public class Rules : MonoBehaviour
 		if (Input.GetKeyDown("space")) //change the turn
 		{
 			turn = !turn;
+			color = -color;
 		}
 		if (Input.GetMouseButtonDown(0) && turn) //if its your turn and you click
 		{
+			if (Possible_Moves().Count == 0);
+			{
+				Debug.Log("Game Over Maybe...");
+				turn = !turn;
+				color = -color;
+			}
 			Vector3 vec = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 11);
 			Vector3 vvec = Culll(Camera.main.ScreenToWorldPoint(vec));
 			directionn dir = new directionn();
@@ -52,18 +59,19 @@ public class Rules : MonoBehaviour
 				Calculate_Board(dir,vvec);
 				Place_Stuff();
 				turn = !turn;
+				color = -color;
 			}
 		}
 	}
 
-	bool on_board(Vector3 move)
+	public bool on_board(Vector3 move)
 	{
 		if (move.x >= 0 && move.x <= 7 && move.y >= 0 && move.y <= 7)
 			return true;
 		else
 			return false;
 	}
-	bool on_board(int movex, int movey)
+	public bool on_board(int movex, int movey)
 	{
 		if (movex >= 0 && movex <= 7 && movey >= 0 && movey <= 7)
 			return true;
@@ -71,14 +79,14 @@ public class Rules : MonoBehaviour
 			return false;
 	}
 
-	Vector3 Culll(Vector3 orig) //makes the spot clicked align with the grid.
+	public Vector3 Culll(Vector3 orig) //makes the spot clicked align with the grid.
 	{
 		//Vector3 point5 = new Vector3 (.5f, .5f, 0);
 		return new Vector3 (Mathf.Floor (orig.x + .5f), Mathf.Floor (orig.y + .5f), 11); //+ point5;
 		//return new Vector3 ((int) (orig.x), (int) (orig.y), 11); //+ point5;
 	}
 
-	struct directionn
+	public struct directionn
 	{
 		public bool maybe;
 		public bool left;
@@ -104,7 +112,7 @@ public class Rules : MonoBehaviour
 		}
 	}
 
-	bool Valid_South(Vector3 move) //down is -y
+	public bool Valid_South(Vector3 move) //down is -y
 	{
 		Debug.Log ("enter valid south");
 		bool maybe = false; //for checking
@@ -136,7 +144,7 @@ public class Rules : MonoBehaviour
 		}
 		return fal;
 	}
-	bool Valid_North(Vector3 move) //up is y
+	public bool Valid_North(Vector3 move) //up is y
 	{
 		bool maybe = false; //for checking
 		bool fal = false; //default return
@@ -163,7 +171,7 @@ public class Rules : MonoBehaviour
 		}
 		return fal;
 	}
-	bool Valid_West(Vector3 move) //left is -x
+	public bool Valid_West(Vector3 move) //left is -x
 	{
 		bool maybe = false; //for checking
 		bool fal = false; //default return
@@ -190,7 +198,7 @@ public class Rules : MonoBehaviour
 		}
 		return fal;
 	}
-	bool Valid_East(Vector3 move) //right is +x
+	public bool Valid_East(Vector3 move) //right is +x
 	{
 		bool maybe = false; //for checking
 		bool fal = false; //default return
@@ -217,7 +225,7 @@ public class Rules : MonoBehaviour
 		}
 		return fal;
 	}
-	bool Valid_NorthEast(Vector3 move) //up right is +x+y
+	public bool Valid_NorthEast(Vector3 move) //up right is +x+y
 	{
 		bool maybe = false; //for checking
 		bool fal = false; //default return
@@ -244,7 +252,7 @@ public class Rules : MonoBehaviour
 		}
 		return fal;
 	}
-	bool Valid_NorthWest(Vector3 move) //up left is -x+y
+	public bool Valid_NorthWest(Vector3 move) //up left is -x+y
 	{
 		bool maybe = false; //for checking
 		bool fal = false; //default return
@@ -271,7 +279,7 @@ public class Rules : MonoBehaviour
 		}
 		return fal;
 	}	
-	bool Valid_SouthEast(Vector3 move) //down right is +x-y
+	public bool Valid_SouthEast(Vector3 move) //down right is +x-y
 	{
 		bool maybe = false; //for checking
 		bool fal = false; //default return
@@ -298,7 +306,7 @@ public class Rules : MonoBehaviour
 		}
 		return fal;
 	}
-	bool Valid_SouthWest(Vector3 move) //down left is -x-y
+	public bool Valid_SouthWest(Vector3 move) //down left is -x-y
 	{
 		bool maybe = false; //for checking
 		bool fal = false; //default return
@@ -326,7 +334,7 @@ public class Rules : MonoBehaviour
 		return fal;
 	}
 	
-	directionn Valid_Move(Vector3 move)
+	public directionn Valid_Move(Vector3 move)
 	{
 		directionn dir = new directionn();
 		
@@ -373,7 +381,7 @@ public class Rules : MonoBehaviour
 		return dir;
 	}
 
-	ArrayList Possible_Moves()
+	public ArrayList Possible_Moves()
 	{
 		ArrayList pos_mov = new ArrayList ();
 		for(int i = 0; i < 8; i++)
@@ -389,7 +397,7 @@ public class Rules : MonoBehaviour
 		return pos_mov;
 	}
 
-	void Calculate_Board(directionn dir, Vector3 move) //takes a move, flips the tiles necessary
+	public void Calculate_Board(directionn dir, Vector3 move) //takes a move, flips the tiles necessary
 	{
 		if (dir.up)
 		{
@@ -542,7 +550,7 @@ public class Rules : MonoBehaviour
 //		return matthew;
 //	}
 
-	void Place_Stuff()  //use this after a valid move has been made, and the matrix updated
+	public void Place_Stuff()  //use this after a valid move has been made, and the matrix updated
 	{
 		//int[,] otho = new int[8, 8];
 		//otho = Matrix_Flip (othello);
