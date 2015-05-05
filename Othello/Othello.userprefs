@@ -1,8 +1,9 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Rules.cs">
     <Files>
-      <File FileName="Assets\Rules.cs" Line="72" Column="2" />
+      <File FileName="Assets\Rules.cs" Line="521" Column="57" />
+      <File FileName="..\..\LifeCycle\INF190-LifeCycle\lifecycle\Assets\basicAI.cs" Line="19" Column="37" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

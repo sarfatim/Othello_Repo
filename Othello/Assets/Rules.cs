@@ -10,6 +10,7 @@ public class Rules : MonoBehaviour
 	Object[,] othe = new Object[8, 8]; //a matrix with gameobjects as a mirror. 
 	//this is just here so that the gameobjects can be destroyed.  Use the other matrix
 	int color = 1;
+	ArrayList possible_moves = new ArrayList();
 
 	void Start () //SOME THINGS ARE UPSIDE DOWN, MAY OR MAY NOT NEED FIXING
 	{
@@ -48,7 +49,7 @@ public class Rules : MonoBehaviour
 			if (dir.maybe)//Valid_Move_White(vvec))
 			{
 				othello[(int)vvec.x,(int)vvec.y] = 1;
-				Calculate_board(dir,vvec);
+				Calculate_Board(dir,vvec);
 				Place_Stuff();
 				turn = !turn;
 			}
@@ -58,6 +59,13 @@ public class Rules : MonoBehaviour
 	bool on_board(Vector3 move)
 	{
 		if (move.x >= 0 && move.x <= 7 && move.y >= 0 && move.y <= 7)
+			return true;
+		else
+			return false;
+	}
+	bool on_board(int movex, int movey)
+	{
+		if (movex >= 0 && movex <= 7 && movey >= 0 && movey <= 7)
 			return true;
 		else
 			return false;
@@ -96,445 +104,443 @@ public class Rules : MonoBehaviour
 		}
 	}
 
-	bool Valid_Move_White_Left(Vector3 move) //checks whether the clicked space is a valid move
-	{	//white is 1, black is -1
-		bool maybe = false;
-		if((int)othello[(int)move.x, (int)move.y] != (int)0) //fails if you click a non-empty space
+	bool Valid_South(Vector3 move) //down is -y
+	{
+		Debug.Log ("enter valid south");
+		bool maybe = false; //for checking
+		bool fal = false; //default return
+		if (on_board(move))
 		{
-			return false;
-		}
-		if (move.x - 2 >= 0)//makes sure it won't go out of bounds
-		{
-			if(othello[(int)move.x - (int)1, (int)move.y] == (int)-color) //if the tile to the left is black
+			Debug.Log("on board");
+			for (int i = 1; i < 8; i++)
 			{
-				for(int i = 2; i < move.x + 1; i++) //for all the spaces to the left of the left space
+				Debug.Log("in for loop");
+				if (on_board((int)move.x, (int)move.y-i))
 				{
-					if(othello[(int)move.x - i, (int)move.y] == (int)color && on_board(move)) //check if they're white
+					Debug.Log("one lower");
+					if (othello[(int)move.x, (int)move.y-i] == -color) //not your color
+					{
+						maybe = true;
+						Debug.Log("found the black");
+					}
+					else if (othello[(int)move.x, (int)move.y-i] == color && maybe) //your color and previous wasn't
 					{
 						return true;
 					}
-					else if (othello[(int)move.x - i, (int)move.y] == (int)0  && on_board(move)) //invalid if blank
+					else
 					{
-						return false; //need to have 1 for each direction because of this
+						return false;
 					}
 				}
 			}
 		}
-		return maybe;
+		return fal;
 	}
-
-	bool Valid_Move_White_Right(Vector3 move) //checks whether the clicked space is a valid move
-	{	//white is 1, black is -1
-		bool maybe = false;
-		if(othello[(int)move.x, (int)move.y] != 0) //fails if you click a non-empty space
+	bool Valid_North(Vector3 move) //up is y
+	{
+		bool maybe = false; //for checking
+		bool fal = false; //default return
+		if (on_board(move))
 		{
-			return false;
-		}
-		if (move.x + 2 <= 7)//makes sure it won't go out of bounds
-		{
-			if(othello[(int)move.x + (int)1, (int)move.y] == (int)-color) //if the tile to the left is black
+			for (int i = 1; i < 8; i++)
 			{
-				for(int i = 2; i < (8 - move.x); i++) //for all the spaces to the left of the left space
+				if (on_board((int)move.x, (int)move.y + i))
 				{
-					if(othello[(int)move.x + i, (int)move.y] == (int)color  && on_board(move)) //check if they're white
+					if (othello[(int)move.x, (int)move.y + i] == -color) //not your color
+					{
+						maybe = true;
+					}
+					else if (othello[(int)move.x, (int)move.y + i] == color && maybe) //your color and previous wasn't
 					{
 						return true;
 					}
-					else if (othello[(int)move.x + i, (int)move.y] == (int)0 && on_board(move)) //invalid if blank
+					else
 					{
-						return false; //need to have 1 for each direction because of this
+						return false;
 					}
 				}
 			}
 		}
-		return maybe;
+		return fal;
 	}
-
-	bool Valid_Move_White_Up(Vector3 move) //checks whether the clicked space is a valid move
-	{	//white is 1, black is -1
-		bool maybe = false;
-		if(othello[(int)move.x, (int)move.y] != 0) //fails if you click a non-empty space
+	bool Valid_West(Vector3 move) //left is -x
+	{
+		bool maybe = false; //for checking
+		bool fal = false; //default return
+		if (on_board(move))
 		{
-			return false;
-		}
-		if (move.y - 2 >= 0)//makes sure it won't go out of bounds
-		{
-			if(othello[(int)move.x, (int)move.y - (int)1] == (int)-color) //if the tile to the left is black
+			for (int i = 1; i < 8; i++)
 			{
-				for(int i = 2; i < move.y + 1; i++) //for all the spaces to the left of the left space
+				if (on_board((int)move.x - i, (int)move.y))
 				{
-					if(othello[(int)move.x, (int)move.y - i] == (int)color  && on_board(move)) //check if they're white
+					if (othello[(int)move.x - i, (int)move.y] == -color) //not your color
+					{
+						maybe = true;
+					}
+					else if (othello[(int)move.x - i, (int)move.y] == color && maybe) //your color and previous wasn't
 					{
 						return true;
 					}
-					else if (othello[(int)move.x, (int)move.y - i] == (int)0 && on_board(move)) //invalid if blank
+					else
 					{
-						return false; //need to have 1 for each direction because of this
+						return false;
 					}
 				}
 			}
 		}
-		return maybe;
+		return fal;
 	}
-
-	bool Valid_Move_White_Down(Vector3 move) //checks whether the clicked space is a valid move
-	{	//white is 1, black is -1
-		bool maybe = false;
-		if(othello[(int)move.x, (int)move.y] != 0) //fails if you click a non-empty space
+	bool Valid_East(Vector3 move) //right is +x
+	{
+		bool maybe = false; //for checking
+		bool fal = false; //default return
+		if (on_board(move))
 		{
-			return false;
-		}
-		if (move.y + 2 <= 7)//makes sure it won't go out of bounds
-		{
-			if(othello[(int)move.x, (int)move.y + 1] == (int)-color) //if the tile to the left is black
+			for (int i = 1; i < 8; i++)
 			{
-				for(int i = 2; i < move.y + 1; i++) //for all the spaces to the left of the left space
+				if (on_board((int)move.x + i, (int)move.y))
 				{
-					if(othello[(int)move.x, (int)move.y + i] == (int)color && on_board(move)) //check if they're white
+					if (othello[(int)move.x + i, (int)move.y] == -color) //not your color
+					{
+						maybe = true;
+					}
+					else if (othello[(int)move.x + i, (int)move.y] == color && maybe) //your color and previous wasn't
 					{
 						return true;
 					}
-					else if (othello[(int)move.x, (int)move.y + i] == (int)0 && on_board(move)) //invalid if blank
+					else
 					{
-						return false; //need to have 1 for each direction because of this
+						return false;
 					}
 				}
 			}
 		}
-		return maybe;
+		return fal;
 	}
-
-	bool Valid_Move_White_Left_Down(Vector3 move) //checks whether the clicked space is a valid move
-	{	//white is 1, black is -1
-		bool maybe = false;
-		if((int)othello[(int)move.x, (int)move.y] != (int)0) //fails if you click a non-empty space
+	bool Valid_NorthEast(Vector3 move) //up right is +x+y
+	{
+		bool maybe = false; //for checking
+		bool fal = false; //default return
+		if (on_board(move))
 		{
-			return false;
-		}
-		if (move.x - 2 >= 0 && move.y - 2 >= 0)//makes sure it won't go out of bounds
-		{
-			if(othello[(int)move.x - (int)1, (int)move.y - 1] == (int)-color) //if the tile to the left is black
+			for (int i = 1; i < 8; i++)
 			{
-				for(int i = 2; i < move.x + 1 && i < move.y + 1; i++) //for all the spaces to the left of the left space
+				if (on_board((int)move.x + i, (int)move.y + i))
 				{
-					if(othello[(int)move.x - i, (int)move.y - 1] == (int)color && on_board(move)) //check if they're white
+					if (othello[(int)move.x + i, (int)move.y + i] == -color) //not your color
+					{
+						maybe = true;
+					}
+					else if (othello[(int)move.x + i, (int)move.y + i] == color && maybe) //your color and previous wasn't
 					{
 						return true;
 					}
-					else if (othello[(int)move.x - i, (int)move.y - 1] == (int)0 && on_board(move)) //invalid if blank
+					else
 					{
-						return false; //need to have 1 for each direction because of this
+						return false;
 					}
 				}
 			}
 		}
-		return maybe;
+		return fal;
 	}
-
-	bool Valid_Move_White_Left_Up(Vector3 move) //checks whether the clicked space is a valid move
-	{	//white is 1, black is -1
-		bool maybe = false;
-		if((int)othello[(int)move.x, (int)move.y] != (int)0) //fails if you click a non-empty space
+	bool Valid_NorthWest(Vector3 move) //up left is -x+y
+	{
+		bool maybe = false; //for checking
+		bool fal = false; //default return
+		if (on_board(move))
 		{
-			return false;
-		}
-		if (move.x - 2 >= 0 && move.y + 2 <= 7)//makes sure it won't go out of bounds
-		{
-			if(othello[(int)move.x - (int)1, (int)move.y + 1] == (int)-color) //if the tile to the left is black
+			for (int i = 1; i < 8; i++)
 			{
-				for(int i = 2; i < move.x + 1 && i < move.y + 1; i++) //for all the spaces to the left of the left space
+				if (on_board((int)move.x - i, (int)move.y + i))
 				{
-					if(othello[(int)move.x - i, (int)move.y + 1] == (int)color && on_board(move)) //check if they're white
+					if (othello[(int)move.x - i, (int)move.y + i] == -color) //not your color
+					{
+						maybe = true;
+					}
+					else if (othello[(int)move.x - i, (int)move.y + i] == color && maybe) //your color and previous wasn't
 					{
 						return true;
 					}
-					else if (othello[(int)move.x - i, (int)move.y + 1] == (int)0 && on_board(move)) //invalid if blank
+					else
 					{
-						return false; //need to have 1 for each direction because of this
+						return false;
 					}
 				}
 			}
 		}
-		return maybe;
-	}
-
-	bool Valid_Move_White_Right_Down(Vector3 move) //checks whether the clicked space is a valid move
-	{	//white is 1, black is -1
-		bool maybe = false;
-		if((int)othello[(int)move.x, (int)move.y] != (int)0) //fails if you click a non-empty space
+		return fal;
+	}	
+	bool Valid_SouthEast(Vector3 move) //down right is +x-y
+	{
+		bool maybe = false; //for checking
+		bool fal = false; //default return
+		if (on_board(move))
 		{
-			return false;
-		}
-		if (move.x + 2 <= 7 && move.y - 2 >= 0)//makes sure it won't go out of bounds
-		{
-			if(othello[(int)move.x + (int)1, (int)move.y - 1] == (int)-color) //if the tile to the left is black
+			for (int i = 1; i < 8; i++)
 			{
-				for(int i = 2; i < move.x + 1 && i < move.y + 1; i++) //for all the spaces to the left of the left space
+				if (on_board((int)move.x + i, (int)move.y - i))
 				{
-					if(othello[(int)move.x + i, (int)move.y - 1] == (int)color) //check if they're white
+					if (othello[(int)move.x + i, (int)move.y - i] == -color) //not your color
+					{
+						maybe = true;
+					}
+					else if (othello[(int)move.x + i, (int)move.y - i] == color && maybe) //your color and previous wasn't
 					{
 						return true;
 					}
-					else if (othello[(int)move.x + i, (int)move.y - 1] == (int)0) //invalid if blank
+					else
 					{
-						return false; //need to have 1 for each direction because of this
+						return false;
 					}
 				}
 			}
 		}
-		return maybe;
+		return fal;
 	}
-
-	bool Valid_Move_White_Right_Up(Vector3 move) //checks whether the clicked space is a valid move
-	{	//white is 1, black is -1
-		bool maybe = false;
-		if((int)othello[(int)move.x, (int)move.y] != (int)0) //fails if you click a non-empty space
+	bool Valid_SouthWest(Vector3 move) //down left is -x-y
+	{
+		bool maybe = false; //for checking
+		bool fal = false; //default return
+		if (on_board(move))
 		{
-			return false;
-		}
-		if (move.x + 2 <= 7 && move.y + 2 <= 7)//makes sure it won't go out of bounds
-		{
-			if(othello[(int)move.x + (int)1, (int)move.y + 1] == (int)-color) //if the tile to the left is black
+			for (int i = 1; i < 8; i++)
 			{
-				for(int i = 2; i < move.x + 1 && i < move.y + 1; i++) //for all the spaces to the left of the left space
+				if (on_board((int)move.x - i, (int)move.y - i))
 				{
-					if(othello[(int)move.x + i, (int)move.y + 1] == (int)color && on_board(move)) //check if they're white
+					if (othello[(int)move.x - i, (int)move.y - i] == -color) //not your color
+					{
+						maybe = true;
+					}
+					else if (othello[(int)move.x - i, (int)move.y - i] == color && maybe) //your color and previous wasn't
 					{
 						return true;
 					}
-					else if (othello[(int)move.x + i, (int)move.y + 1] == (int)0 && on_board(move)) //invalid if blank
+					else
 					{
-						return false; //need to have 1 for each direction because of this
+						return false;
 					}
 				}
 			}
 		}
-		return maybe;
+		return fal;
 	}
-
+	
 	directionn Valid_Move(Vector3 move)
 	{
 		directionn dir = new directionn();
 		
-		if (Valid_Move_White_Down(move))
+		if (Valid_South(move))
 		{
 			dir.maybe = true;
 			dir.down = true;
 		}
-		if (Valid_Move_White_Left(move))
+		if (Valid_West(move))
 		{
 			dir.maybe = true;
 			dir.left = true;
 		}
-		if (Valid_Move_White_Right(move))
+		if (Valid_East(move))
 		{
 			dir.maybe = true;
 			dir.right = true;
 		}
-		if (Valid_Move_White_Left_Up(move))
+		if (Valid_North(move))
 		{
 			dir.maybe = true;
 			dir.left_up = true;
 		}
-		if (Valid_Move_White_Left_Down(move))
+		if (Valid_SouthWest(move))
 		{
 			dir.maybe = true;
 			dir.left_down = true;
 		}
-		if (Valid_Move_White_Right_Up(move))
+		if (Valid_NorthEast(move))
 		{
 			dir.maybe = true;
 			dir.right_up = true;
 		}
-		if (Valid_Move_White_Right_Down(move))
+		if (Valid_SouthEast(move))
 		{
 			dir.maybe = true;
 			dir.right_down = true;
 		}
-		if (Valid_Move_White_Up(move))
+		if (Valid_NorthWest(move))
 		{
 			dir.maybe = true;
-			dir.up = true;
+			dir.left_up = true;
 		}
 		return dir;
 	}
 
-	void Calculate_board(directionn dir, Vector3 move)
+	ArrayList Possible_Moves()
 	{
-		if (dir.left)
+		ArrayList pos_mov = new ArrayList ();
+		for(int i = 0; i < 8; i++)
 		{
-			if (move.x - 2 >= 0)//makes sure it won't go out of bounds
+			for (int j = 0; j < 8; j++)
 			{
-				if(othello[(int)move.x - (int)1, (int)move.y] == (int)-color) //if the tile to the left is black
+				if (Valid_Move(new Vector3(i,j,0)).maybe)
 				{
-					for(int i = 1; i < move.x + 1; i++) //for all the spaces to the left of the space
+					pos_mov.Add(new Vector3(i,j,0));
+				}
+			}
+		}
+		return pos_mov;
+	}
+
+	void Calculate_Board(directionn dir, Vector3 move) //takes a move, flips the tiles necessary
+	{
+		if (dir.up)
+		{
+			for (int i = 1; i < 8; i++)
+			{
+				if (on_board((int)move.x, (int)move.y + i))
+				{
+					if (othello[(int)move.x, (int)move.y + i] == -color) //not your color
 					{
-						if(othello[(int)move.x - i, (int)move.y] == (int)-color  && on_board(move)) //check if they're white
-						{
-							othello[(int)move.x - i, (int)move.y] = color;
-						}
-						else if (othello[(int)move.x - i, (int)move.y] == (int)color && on_board(move)) //invalid if blank
-						{
-							break; //need to have 1 for each direction because of this
-						}
+						othello[(int)move.x, (int)move.y + i] = color;
+					}
+					else if (othello[(int)move.x, (int)move.y + i] == color) //your color and previous wasn't
+					{
+						break;
 					}
 				}
 			}
 		}
 		if (dir.down)
 		{
-			if (move.y + 2 <= 7)//makes sure it won't go out of bounds
+			for (int i = 1; i < 8; i++)
 			{
-				if(othello[(int)move.x, (int)move.y + (int)1] == (int)-color) //if the tile to the left is black
+				if (on_board((int)move.x, (int)move.y - i))
 				{
-					for(int i = 1; i < move.y + 1; i++) //for all the spaces to the left of the left space
+					if (othello[(int)move.x, (int)move.y - i] == -color) //not your color
 					{
-						if(othello[(int)move.x, (int)move.y + i] == (int)-color && on_board(move)) //check if they're white
-						{
-							othello[(int)move.x, (int)move.y + i] = color;
-						}
-						else if (othello[(int)move.x, (int)move.y + i] == (int)color && on_board(move)) //invalid if blank
-						{
-							break; //need to have 1 for each direction because of this
-						}
+						othello[(int)move.x, (int)move.y-i] = color;
+					}
+					else if (othello[(int)move.x, (int)move.y - i] == color) //your color and previous wasn't
+					{
+						break;
+					}
+				}
+			}
+		}
+		if (dir.left)
+		{
+			for (int i = 1; i < 8; i++)
+			{
+				if (on_board((int)move.x - i, (int)move.y))
+				{
+					if (othello[(int)move.x - i, (int)move.y] == -color) //not your color
+					{
+						othello[(int)move.x - i, (int)move.y] = color;
+					}
+					else if (othello[(int)move.x - i, (int)move.y] == color) //your color and previous wasn't
+					{
+						break;
 					}
 				}
 			}
 		}
 		if (dir.right)
 		{
-			if (move.x + 2 <= 7)//makes sure it won't go out of bounds
+			for (int i = 1; i < 8; i++)
 			{
-				if(othello[(int)move.x + (int)1, (int)move.y] == (int)-color) //if the tile to the left is black
+				if (on_board((int)move.x + i, (int)move.y))
 				{
-					for(int i = 1; i < (8 - move.x); i++) //for all the spaces to the left of the left space
+					if (othello[(int)move.x + i, (int)move.y] == -color) //not your color
 					{
-						if(othello[(int)move.x + i, (int)move.y] == (int)-color && on_board(move)) //check if they're white
-						{
-							othello[(int)move.x + i, (int)move.y] = color;
-						}
-						else if (othello[(int)move.x + i, (int)move.y] == (int)color && on_board(move)) //invalid if blank
-						{
-							break; //need to have 1 for each direction because of this
-						}
+						othello[(int)move.x + i, (int)move.y] = color;
 					}
-				}
-			}
-		}
-		if (dir.up)
-		{
-			if (move.y - 2 >= 0)//makes sure it won't go out of bounds
-			{
-				if(othello[(int)move.x, (int)move.y - (int)1] == (int)-color) //if the tile to the left is black
-				{
-					for(int i = 1; i < move.y + 1; i++) //for all the spaces to the left of the left space
+					else if (othello[(int)move.x + i, (int)move.y] == color) //your color and previous wasn't
 					{
-						if(othello[(int)move.x, (int)move.y - i] == (int)-color && on_board(move)) //check if they're white
-						{
-							othello[(int)move.x, (int)move.y - i] = color;
-						}
-						else if (othello[(int)move.x, (int)move.y - i] == (int)0 && on_board(move)) //invalid if blank
-						{
-							break; //need to have 1 for each direction because of this
-						}
-					}
-				}
-			}
-		}
-		if (dir.left_up)
-		{
-			if (move.x - 2 >= 0 && move.y - 2 >= 0)//makes sure it won't go out of bounds
-			{
-				if(othello[(int)move.x - 1, (int)move.y - 1] == (int)-color) //if the tile to the left is black
-				{
-					for(int i = 1; i < (move.x + 1) && (i < move.y + 1); i++) //for all the spaces to the left of the space
-					{
-						if(othello[(int)move.x - i, (int)move.y - i] == (int)-color  && on_board(move)) //check if they're white
-						{
-							othello[(int)move.x - i, (int)move.y - i] = color;
-						}
-						else if (othello[(int)move.x - i, (int)move.y - i] == (int)color && on_board(move)) //invalid if blank
-						{
-							break; //need to have 1 for each direction because of this
-						}
+						break;
 					}
 				}
 			}
 		}
 		if (dir.left_down)
 		{
-			if (move.x - 2 >= 0 && move.y + 2 <= 7)//makes sure it won't go out of bounds
+			for (int i = 1; i < 8; i++)
 			{
-				if(othello[(int)move.x - 1, (int)move.y + 1] == (int)-color) //if the tile to the left is black
+				if (on_board((int)move.x - i, (int)move.y - i))
 				{
-					for(int i = 1; i < (move.x + 1) && (i < move.y + 1); i++) //for all the spaces to the left of the space
+					if (othello[(int)move.x - i, (int)move.y - i] == -color) //not your color
 					{
-						if(othello[(int)move.x - i, (int)move.y + i] == (int)-color && on_board(move)) //check if they're white
-						{
-							othello[(int)move.x - i, (int)move.y + i] = color;
-						}
-						else if (othello[(int)move.x - i, (int)move.y + i] == (int)color && on_board(move)) //invalid if blank
-						{
-							break; //need to have 1 for each direction because of this
-						}
+						othello[(int)move.x - i, (int)move.y - i] = color;
+					}
+					else if (othello[(int)move.x - i, (int)move.y - i] == color) //your color and previous wasn't
+					{
+						break;
+					}
+				}
+			}
+		}
+		if (dir.left_up)
+		{
+			for (int i = 1; i < 8; i++)
+			{
+				if (on_board((int)move.x - i, (int)move.y + i))
+				{
+					if (othello[(int)move.x - i, (int)move.y + i] == -color) //not your color
+					{
+						othello[(int)move.x - i, (int)move.y + i] = color;
+					}
+					else if (othello[(int)move.x - i, (int)move.y + i] == color) //your color and previous wasn't
+					{
+						break;
 					}
 				}
 			}
 		}
 		if (dir.right_down)
 		{
-			if (move.x + 2 <= 7 && move.y + 2 <= 7)//makes sure it won't go out of bounds
+			for (int i = 1; i < 8; i++)
 			{
-				if(othello[(int)move.x + 1, (int)move.y + 1] == (int)-color) //if the tile to the left is black
+				if (on_board((int)move.x + i, (int)move.y - i))
 				{
-					for(int i = 1; i < move.x + 1 && i < move.y + 1; i++) //for all the spaces to the left of the space
+					if (othello[(int)move.x + i, (int)move.y - i] == -color) //not your color
 					{
-						if(othello[(int)move.x + i, (int)move.y + i] == (int)-color && on_board(move)) //check if they're white
-						{
-							othello[(int)move.x + i, (int)move.y + i] = color;
-						}
-						else if (othello[(int)move.x + i, (int)move.y + i] == (int)color && on_board(move)) //invalid if blank
-						{
-							break; //need to have 1 for each direction because of this
-						}
+						othello[(int)move.x + i, (int)move.y - i] = color;
+					}
+					else if (othello[(int)move.x + i, (int)move.y - i] == color) //your color and previous wasn't
+					{
+						break;
 					}
 				}
 			}
 		}
 		if (dir.right_up)
 		{
-			if (move.x + 2 <= 7 && move.y - 2 >= 0)//makes sure it won't go out of bounds
+			for (int i = 1; i < 8; i++)
 			{
-				if(othello[(int)move.x + 1, (int)move.y - 1] == (int)-color) //if the tile to the left is black
+				if (on_board((int)move.x + i, (int)move.y + i))
 				{
-					for(int i = 1; i < move.x + 1 && i < move.y + 1; i++) //for all the spaces to the left of the space
+					if (othello[(int)move.x + i, (int)move.y + i] == -color) //not your color
 					{
-						if(othello[(int)move.x + i, (int)move.y - i] == (int)-color && on_board(move)) //check if they're white
-						{
-							othello[(int)move.x + i, (int)move.y - i] = color;
-						}
-						else if (othello[(int)move.x + i, (int)move.y - i] == (int)color && on_board(move)) //invalid if blank
-						{
-							break; //need to have 1 for each direction because of this
-						}
+						othello[(int)move.x + i, (int)move.y + i] = color;
+					}
+					else if (othello[(int)move.x + i, (int)move.y + i] == color) //your color and previous wasn't
+					{
+						break;
 					}
 				}
 			}
 		}
 	}
 
-	int[,] Matrix_Flip(int[,] matt)
-	{
-		int[,] matthew = new int[8, 8];
-		for (int i = 0; i < 8; i++)
-		{
-			for (int j = 0; j < 8; j++)
-			{
-				matthew[i,j] = matt[i, 7-j];
-			}
-		}
-		return matthew;
-	}
+//	int[,] Matrix_Flip(int[,] matt)
+//	{
+//		int[,] matthew = new int[8, 8];
+//		for (int i = 0; i < 8; i++)
+//		{
+//			for (int j = 0; j < 8; j++)
+//			{
+//				matthew[i,j] = matt[i, 7-j];
+//			}
+//		}
+//		return matthew;
+//	}
 
 	void Place_Stuff()  //use this after a valid move has been made, and the matrix updated
 	{
