@@ -30,8 +30,10 @@ public class SimpleAI : Rules
 				Vector3 best = BestMove (board_clone);
 				directionn d= Valid_Move(best, board_clone);
 				Debug.Log ("best move: " + best.x + ", " + best.y);
-				Calculate_Board(d,best, board_clone);
-				board_clone[(int)best.x,(int)best.y] = color;
+
+				othelloooo[(int)best.x,(int)best.y] = color;
+				Calculate_Board(d,best, othelloooo);
+
 				string board = "";
 				for (int i = 0; i < 8; ++i)
 				{

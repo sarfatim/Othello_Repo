@@ -48,6 +48,7 @@
   <ItemGroup>
      <Compile Include="Assets\Rules.cs" />
      <Compile Include="Assets\SimpleAI.cs" />
+     <Compile Include="Assets\SuperSimpleAI.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
