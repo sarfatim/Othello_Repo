@@ -3,10 +3,11 @@ using System.Collections;
 
 public class SimpleAI : Rules 
 {
+	int[,] board_clone = new int[8, 8];
 	// Use this for initialization
 	void Start () 
 	{
-
+		board_clone = othelloooo;
 	}
 	
 	// Update is called once per frame
@@ -18,7 +19,7 @@ public class SimpleAI : Rules
 			{
 				// Gameover at this point
 			}
-			else if (Possible_Moves().Count == 0)
+			else if (Possible_Moves(board_clone).Count == 0)
 			{
 				game_counter++;
 				turn = !turn;
@@ -26,21 +27,21 @@ public class SimpleAI : Rules
 			}
 			else
 			{
-				Vector3 best = BestMove (othello);
-				directionn d= Valid_Move(best);
+				Vector3 best = BestMove (board_clone);
+				directionn d= Valid_Move(best, board_clone);
 				Debug.Log ("best move: " + best.x + ", " + best.y);
-				Calculate_Board(d,best);
-				othello[(int)best.x,(int)best.y] = -1;
+				Calculate_Board(d,best, board_clone);
+				board_clone[(int)best.x,(int)best.y] = color;
 				string board = "";
 				for (int i = 0; i < 8; ++i)
 				{
 					for (int j = 0; j < 8; ++j)
 					{
-						board += othello[i, j];
+						board += board_clone[i, j];
 					}
 				}
 				Debug.Log("board: " + board);
-				Place_Stuff();
+				Place_Stuff(board_clone);
 				turn = !turn;
 				color = -color;
 			}
@@ -61,13 +62,13 @@ public class SimpleAI : Rules
 			}
 		}
 
-		directionn d = Valid_Move (move);
-		Calculate_Board (d, move);
+		directionn d = Valid_Move (move, board_clone);
+		Calculate_Board (d, move, board_clone);
 		for (int i = 0; i < 8; ++i) 
 		{
 			for (int j = 0; j < 8; ++j)
 			{
-				new_total += othello[i,j];
+				new_total += board_clone[i,j];
 			}
 		}
 		Debug.Log ("before change back");
@@ -75,7 +76,7 @@ public class SimpleAI : Rules
 		{
 			for (int j = 0; j < 8; ++j)
 			{
-				othello[i,j] = old[i,j];
+				board_clone[i,j] = old[i,j];
 			}
 		}
 		Debug.Log ("after change back");
@@ -90,12 +91,12 @@ public class SimpleAI : Rules
 		Vector3 best = new Vector3(0,0,0);
 		int current = 0;
 		int best_index = 0;
-		int poss = Possible_Moves ().Count;
-		Debug.Log ("Possible Moves Count: " + poss);
+		int poss = Possible_Moves (board_clone).Count;
+		Debug.Log ("(bestmove) Possible Moves Count: " + poss);
 		for (int i = 0; i < poss; ++i) 
 		{
-			Debug.Log("For loop, index: " + i);
-			Vector3 current_move = (Vector3)(Possible_Moves()[i]);
+			Debug.Log("-------------For loop, index: " + i);
+			Vector3 current_move = (Vector3)(Possible_Moves(board_clone)[i]);
 			current = NumPiecesTaken(current_move, old1);
 			if (current > best_count)
 			{
@@ -103,7 +104,7 @@ public class SimpleAI : Rules
 				best_index = i;
 			}
 		}
-		best = (Vector3)(Possible_Moves()[best_index]);
+		best = (Vector3)(Possible_Moves(board_clone)[best_index]);
 		return best;
 	}
 }

@@ -4,12 +4,12 @@ using System.Collections;
 public class Rules : MonoBehaviour 
 {
 	public static bool turn = true; //true is white
-	public static int[,] othello = new int[8,8]; //a matrix with 1,-1, and 0 for reference
+	public static int[,] othelloooo = new int[8,8]; //a matrix with 1,-1, and 0 for reference
 	public GameObject white1;
 	public GameObject black1;
 	public static Object[,] othe = new Object[8, 8]; //a matrix with gameobjects as a mirror. 
 	//this is just here so that the gameobjects can be destroyed.  Use the other matrix
-	public static int color = 1;
+	public static int color = -1;
 	public static int game_counter = 0;
 	//ArrayList possible_moves = new ArrayList();
 
@@ -22,17 +22,17 @@ public class Rules : MonoBehaviour
 		{
 			for(int j = 0; j < 8; j++)
 			{
-				othello[i,j] = 0;
+				othelloooo[i,j] = 0;
 			}
 		}
-		othello [3,3] = -1;
-		othello [4,4] = -1;
-		othello [3,4] = 1;
-		othello [4,3] = 1;
+		othelloooo [3,3] = -1;
+		othelloooo [4,4] = -1;
+		othelloooo [3,4] = 1;
+		othelloooo [4,3] = 1;
 		//othello [0, 0] = 1;
 
 
-		Place_Stuff ();
+		Place_Stuff (othelloooo);
 	}
 	
 	// Update is called once per frame
@@ -45,7 +45,7 @@ public class Rules : MonoBehaviour
 		}
 		if (Input.GetMouseButtonDown(0) && turn) //if its your turn and you click
 		{
-			ArrayList posss = Possible_Moves();
+			ArrayList posss = Possible_Moves(othelloooo);
 			if (posss.Count == 0)
 			{
 				turn = !turn;
@@ -58,12 +58,12 @@ public class Rules : MonoBehaviour
 				Vector3 vec = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 11);
 				Vector3 vvec = Culll(Camera.main.ScreenToWorldPoint(vec));
 				directionn dir = new directionn();
-				dir = Valid_Move(vvec);
+				dir = Valid_Move(vvec, othelloooo);
 				if (dir.maybe)//Valid_Move_White(vvec))
 				{
-					othello[(int)vvec.x,(int)vvec.y] = 1;
-					Calculate_Board(dir,vvec);
-					Place_Stuff();
+					othelloooo[(int)vvec.x,(int)vvec.y] = color;
+					Calculate_Board(dir,vvec, othelloooo);
+					Place_Stuff(othelloooo);
 					turn = !turn;
 					color = -color;
 				}
@@ -119,7 +119,7 @@ public class Rules : MonoBehaviour
 		}
 	}
 
-	public bool Valid_South(Vector3 move) //down is -y
+	public bool Valid_South(Vector3 move, int[,] othello) //down is -y
 	{
 		bool maybe = false; //for checking
 		bool fal = false; //default return
@@ -146,7 +146,7 @@ public class Rules : MonoBehaviour
 		}
 		return fal;
 	}
-	public bool Valid_North(Vector3 move) //up is y
+	public bool Valid_North(Vector3 move, int[,] othello) //up is y
 	{
 		bool maybe = false; //for checking
 		bool fal = false; //default return
@@ -173,7 +173,7 @@ public class Rules : MonoBehaviour
 		}
 		return fal;
 	}
-	public bool Valid_West(Vector3 move) //left is -x
+	public bool Valid_West(Vector3 move, int[,] othello) //left is -x
 	{
 		bool maybe = false; //for checking
 		bool fal = false; //default return
@@ -200,7 +200,7 @@ public class Rules : MonoBehaviour
 		}
 		return fal;
 	}
-	public bool Valid_East(Vector3 move) //right is +x
+	public bool Valid_East(Vector3 move, int[,] othello) //right is +x
 	{
 		bool maybe = false; //for checking
 		bool fal = false; //default return
@@ -227,7 +227,7 @@ public class Rules : MonoBehaviour
 		}
 		return fal;
 	}
-	public bool Valid_NorthEast(Vector3 move) //up right is +x+y
+	public bool Valid_NorthEast(Vector3 move, int[,] othello) //up right is +x+y
 	{
 		bool maybe = false; //for checking
 		bool fal = false; //default return
@@ -254,7 +254,7 @@ public class Rules : MonoBehaviour
 		}
 		return fal;
 	}
-	public bool Valid_NorthWest(Vector3 move) //up left is -x+y
+	public bool Valid_NorthWest(Vector3 move, int[,] othello) //up left is -x+y
 	{
 		bool maybe = false; //for checking
 		bool fal = false; //default return
@@ -281,7 +281,7 @@ public class Rules : MonoBehaviour
 		}
 		return fal;
 	}	
-	public bool Valid_SouthEast(Vector3 move) //down right is +x-y
+	public bool Valid_SouthEast(Vector3 move, int[,] othello) //down right is +x-y
 	{
 		bool maybe = false; //for checking
 		bool fal = false; //default return
@@ -308,7 +308,7 @@ public class Rules : MonoBehaviour
 		}
 		return fal;
 	}
-	public bool Valid_SouthWest(Vector3 move) //down left is -x-y
+	public bool Valid_SouthWest(Vector3 move, int[,] othello) //down left is -x-y
 	{
 		bool maybe = false; //for checking
 		bool fal = false; //default return
@@ -336,46 +336,46 @@ public class Rules : MonoBehaviour
 		return fal;
 	}
 	
-	public directionn Valid_Move(Vector3 move)
+	public directionn Valid_Move(Vector3 move, int[,] othello)
 	{
 		directionn dir = new directionn();
 		
-		if (Valid_South(move))
+		if (Valid_South(move, othello))
 		{
 			dir.maybe = true;
 			dir.down = true;
 		}
-		if (Valid_West(move))
+		if (Valid_West(move, othello))
 		{
 			dir.maybe = true;
 			dir.left = true;
 		}
-		if (Valid_East(move))
+		if (Valid_East(move, othello))
 		{
 			dir.maybe = true;
 			dir.right = true;
 		}
-		if (Valid_North(move))
+		if (Valid_North(move, othello))
 		{
 			dir.maybe = true;
 			dir.up = true;
 		}
-		if (Valid_SouthWest(move))
+		if (Valid_SouthWest(move, othello))
 		{
 			dir.maybe = true;
 			dir.left_down = true;
 		}
-		if (Valid_NorthEast(move))
+		if (Valid_NorthEast(move, othello))
 		{
 			dir.maybe = true;
 			dir.right_up = true;
 		}
-		if (Valid_SouthEast(move))
+		if (Valid_SouthEast(move, othello))
 		{
 			dir.maybe = true;
 			dir.right_down = true;
 		}
-		if (Valid_NorthWest(move))
+		if (Valid_NorthWest(move, othello))
 		{
 			dir.maybe = true;
 			dir.left_up = true;
@@ -383,14 +383,14 @@ public class Rules : MonoBehaviour
 		return dir;
 	}
 
-	public ArrayList Possible_Moves()
+	public ArrayList Possible_Moves(int[,] othello)
 	{
 		ArrayList pos_mov = new ArrayList ();
 		for(int i = 0; i < 8; i++)
 		{
 			for (int j = 0; j < 8; j++)
 			{
-				if (Valid_Move(new Vector3(i,j,0)).maybe)
+				if (Valid_Move(new Vector3(i,j,0), othello).maybe)
 				{
 					pos_mov.Add(new Vector3(i,j,0));
 				}
@@ -400,7 +400,7 @@ public class Rules : MonoBehaviour
 		return pos_mov;
 	}
 
-	public void Calculate_Board(directionn dir, Vector3 move) //takes a move, flips the tiles necessary
+	public void Calculate_Board(directionn dir, Vector3 move, int[,] othello) //takes a move, flips the tiles necessary
 	{
 		if (dir.up)
 		{
@@ -553,23 +553,25 @@ public class Rules : MonoBehaviour
 //		return matthew;
 //	}
 
-	public void Place_Stuff()  //use this after a valid move has been made, and the matrix updated
+	public void Place_Stuff(int[,] board)  //use this after a valid move has been made, and the matrix updated
 	{
 		//int[,] otho = new int[8, 8];
 		//otho = Matrix_Flip (othello);
+		othelloooo = board;
+
 		for (int i = 0; i <8; i++) 
 		{
 			for(int j = 0; j < 8; j++)
 			{
-				if (othello[i,j] != 0)
+				if (othelloooo[i,j] != 0)
 				{
 					Destroy(othe[i,j]);
 				}
-				if (othello[i,j] == 1)
+				if (othelloooo[i,j] == 1)
 				{
 					othe[i,j] = Instantiate(white1, new Vector3(i,j,11), Quaternion.identity);
 				}
-				else if (othello[i,j] == -1)
+				else if (othelloooo[i,j] == -1)
 				{
 					othe[i,j] = Instantiate(black1, new Vector3(i,j,11), Quaternion.identity);
 				}
