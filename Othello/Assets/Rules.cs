@@ -3,19 +3,21 @@ using System.Collections;
 
 public class Rules : MonoBehaviour 
 {
-	public bool turn = true; //true is white
-	public int[,] othello = new int[8,8]; //a matrix with 1,-1, and 0 for reference
+	public static bool turn = true; //true is white
+	public static int[,] othello = new int[8,8]; //a matrix with 1,-1, and 0 for reference
 	public GameObject white1;
 	public GameObject black1;
-	public Object[,] othe = new Object[8, 8]; //a matrix with gameobjects as a mirror. 
+	public static Object[,] othe = new Object[8, 8]; //a matrix with gameobjects as a mirror. 
 	//this is just here so that the gameobjects can be destroyed.  Use the other matrix
-	public int color = 1;
+	public static int color = 1;
+	public static int game_counter = 0;
 	//ArrayList possible_moves = new ArrayList();
 
 	void Start () //SOME THINGS ARE UPSIDE DOWN, MAY OR MAY NOT NEED FIXING
 	{
 		white1 = GameObject.Find("white");
 		black1 = GameObject.Find("black");
+		game_counter = 0;
 		for(int i = 0; i < 8; i++)
 		{
 			for(int j = 0; j < 8; j++)
@@ -43,23 +45,28 @@ public class Rules : MonoBehaviour
 		}
 		if (Input.GetMouseButtonDown(0) && turn) //if its your turn and you click
 		{
-			if (Possible_Moves().Count == 0);
+			ArrayList posss = Possible_Moves();
+			if (posss.Count == 0)
 			{
-				Debug.Log("Game Over Maybe...");
 				turn = !turn;
 				color = -color;
+				game_counter++;
 			}
-			Vector3 vec = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 11);
-			Vector3 vvec = Culll(Camera.main.ScreenToWorldPoint(vec));
-			directionn dir = new directionn();
-			dir = Valid_Move(vvec);
-			if (dir.maybe)//Valid_Move_White(vvec))
+			else
 			{
-				othello[(int)vvec.x,(int)vvec.y] = 1;
-				Calculate_Board(dir,vvec);
-				Place_Stuff();
-				turn = !turn;
-				color = -color;
+				game_counter = 0;
+				Vector3 vec = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 11);
+				Vector3 vvec = Culll(Camera.main.ScreenToWorldPoint(vec));
+				directionn dir = new directionn();
+				dir = Valid_Move(vvec);
+				if (dir.maybe)//Valid_Move_White(vvec))
+				{
+					othello[(int)vvec.x,(int)vvec.y] = 1;
+					Calculate_Board(dir,vvec);
+					Place_Stuff();
+					turn = !turn;
+					color = -color;
+				}
 			}
 		}
 	}
@@ -114,22 +121,17 @@ public class Rules : MonoBehaviour
 
 	public bool Valid_South(Vector3 move) //down is -y
 	{
-		Debug.Log ("enter valid south");
 		bool maybe = false; //for checking
 		bool fal = false; //default return
 		if (on_board(move))
 		{
-			Debug.Log("on board");
 			for (int i = 1; i < 8; i++)
 			{
-				Debug.Log("in for loop");
 				if (on_board((int)move.x, (int)move.y-i))
 				{
-					Debug.Log("one lower");
 					if (othello[(int)move.x, (int)move.y-i] == -color) //not your color
 					{
 						maybe = true;
-						Debug.Log("found the black");
 					}
 					else if (othello[(int)move.x, (int)move.y-i] == color && maybe) //your color and previous wasn't
 					{
@@ -356,7 +358,7 @@ public class Rules : MonoBehaviour
 		if (Valid_North(move))
 		{
 			dir.maybe = true;
-			dir.left_up = true;
+			dir.up = true;
 		}
 		if (Valid_SouthWest(move))
 		{
@@ -394,6 +396,7 @@ public class Rules : MonoBehaviour
 				}
 			}
 		}
+		Debug.Log("pos_mov count: " +pos_mov.Count);
 		return pos_mov;
 	}
 
