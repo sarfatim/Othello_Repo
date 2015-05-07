@@ -123,7 +123,7 @@ public class Rules : MonoBehaviour
 	{
 		bool maybe = false; //for checking
 		bool fal = false; //default return
-		if (on_board(move))
+		if (on_board(move) && othello[(int)move.x, (int)move.y] == 0)
 		{
 			for (int i = 1; i < 8; i++)
 			{
@@ -150,7 +150,7 @@ public class Rules : MonoBehaviour
 	{
 		bool maybe = false; //for checking
 		bool fal = false; //default return
-		if (on_board(move))
+		if (on_board(move) && othello[(int)move.x, (int)move.y] == 0)
 		{
 			for (int i = 1; i < 8; i++)
 			{
@@ -177,7 +177,7 @@ public class Rules : MonoBehaviour
 	{
 		bool maybe = false; //for checking
 		bool fal = false; //default return
-		if (on_board(move))
+		if (on_board(move) && othello[(int)move.x, (int)move.y] == 0)
 		{
 			for (int i = 1; i < 8; i++)
 			{
@@ -204,7 +204,7 @@ public class Rules : MonoBehaviour
 	{
 		bool maybe = false; //for checking
 		bool fal = false; //default return
-		if (on_board(move))
+		if (on_board(move) && othello[(int)move.x, (int)move.y] == 0)
 		{
 			for (int i = 1; i < 8; i++)
 			{
@@ -231,7 +231,7 @@ public class Rules : MonoBehaviour
 	{
 		bool maybe = false; //for checking
 		bool fal = false; //default return
-		if (on_board(move))
+		if (on_board(move) && othello[(int)move.x, (int)move.y] == 0)
 		{
 			for (int i = 1; i < 8; i++)
 			{
@@ -258,7 +258,7 @@ public class Rules : MonoBehaviour
 	{
 		bool maybe = false; //for checking
 		bool fal = false; //default return
-		if (on_board(move))
+		if (on_board(move) && othello[(int)move.x, (int)move.y] == 0)
 		{
 			for (int i = 1; i < 8; i++)
 			{
@@ -285,7 +285,7 @@ public class Rules : MonoBehaviour
 	{
 		bool maybe = false; //for checking
 		bool fal = false; //default return
-		if (on_board(move))
+		if (on_board(move) && othello[(int)move.x, (int)move.y] == 0)
 		{
 			for (int i = 1; i < 8; i++)
 			{
@@ -312,7 +312,7 @@ public class Rules : MonoBehaviour
 	{
 		bool maybe = false; //for checking
 		bool fal = false; //default return
-		if (on_board(move))
+		if (on_board(move) && othello[(int)move.x, (int)move.y] == 0)
 		{
 			for (int i = 1; i < 8; i++)
 			{
