@@ -8,6 +8,8 @@ public class SimpleAI : Rules
 	void Start () 
 	{
 		board_clone = othelloooo;
+		white1 = GameObject.Find("white");
+		black1 = GameObject.Find("black");
 	}
 	
 	// Update is called once per frame

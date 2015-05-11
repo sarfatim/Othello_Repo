@@ -29,7 +29,7 @@ public class Rules : MonoBehaviour
 		othelloooo [4,4] = -1;
 		othelloooo [3,4] = 1;
 		othelloooo [4,3] = 1;
-		//othello [0, 0] = 1;
+		othelloooo [0, 0] = -1;
 
 
 		Place_Stuff (othelloooo);

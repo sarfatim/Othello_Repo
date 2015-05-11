@@ -7,7 +7,8 @@ public class SuperSimpleAI : Rules
 	// Use this for initialization
 	void Start () 
 	{
-	
+		white1 = GameObject.Find("white");
+		black1 = GameObject.Find("black");
 	}
 	
 	// Update is called once per frame
