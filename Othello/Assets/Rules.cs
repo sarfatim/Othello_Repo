@@ -29,7 +29,7 @@ public class Rules : MonoBehaviour
 		othelloooo [4,4] = -1;
 		othelloooo [3,4] = 1;
 		othelloooo [4,3] = 1;
-		othelloooo [0, 0] = -1;
+		//othelloooo [0, 0] = -1;
 
 
 		Place_Stuff (othelloooo);
@@ -339,6 +339,7 @@ public class Rules : MonoBehaviour
 	public directionn Valid_Move(Vector3 move, int[,] othello)
 	{
 		directionn dir = new directionn();
+		dir.start ();
 		
 		if (Valid_South(move, othello))
 		{
@@ -396,7 +397,7 @@ public class Rules : MonoBehaviour
 				}
 			}
 		}
-		Debug.Log("pos_mov count: " +pos_mov.Count);
+		//Debug.Log("pos_mov count: " +pos_mov.Count);
 		return pos_mov;
 	}
 
@@ -413,6 +414,10 @@ public class Rules : MonoBehaviour
 						othello[(int)move.x, (int)move.y + i] = color;
 					}
 					else if (othello[(int)move.x, (int)move.y + i] == color) //your color and previous wasn't
+					{
+						break;
+					}
+					else if (othello[(int)move.x, (int)move.y + i] == 0) //your color and previous wasn't
 					{
 						break;
 					}
@@ -433,6 +438,10 @@ public class Rules : MonoBehaviour
 					{
 						break;
 					}
+					else if (othello[(int)move.x, (int)move.y - i] == 0) //your color and previous wasn't
+					{
+						break;
+					}
 				}
 			}
 		}
@@ -447,6 +456,10 @@ public class Rules : MonoBehaviour
 						othello[(int)move.x - i, (int)move.y] = color;
 					}
 					else if (othello[(int)move.x - i, (int)move.y] == color) //your color and previous wasn't
+					{
+						break;
+					}
+					else if (othello[(int)move.x - i, (int)move.y] == 0) //your color and previous wasn't
 					{
 						break;
 					}
@@ -467,6 +480,10 @@ public class Rules : MonoBehaviour
 					{
 						break;
 					}
+					else if (othello[(int)move.x + i, (int)move.y ] == 0) //your color and previous wasn't
+					{
+						break;
+					}
 				}
 			}
 		}
@@ -481,6 +498,10 @@ public class Rules : MonoBehaviour
 						othello[(int)move.x - i, (int)move.y - i] = color;
 					}
 					else if (othello[(int)move.x - i, (int)move.y - i] == color) //your color and previous wasn't
+					{
+						break;
+					}
+					else if (othello[(int)move.x - i, (int)move.y - i] == 0) //your color and previous wasn't
 					{
 						break;
 					}
@@ -501,6 +522,10 @@ public class Rules : MonoBehaviour
 					{
 						break;
 					}
+					else if (othello[(int)move.x - i, (int)move.y + i] == 0) //your color and previous wasn't
+					{
+						break;
+					}
 				}
 			}
 		}
@@ -518,6 +543,10 @@ public class Rules : MonoBehaviour
 					{
 						break;
 					}
+					else if (othello[(int)move.x + i, (int)move.y - i] == 0) //your color and previous wasn't
+					{
+						break;
+					}
 				}
 			}
 		}
@@ -532,6 +561,10 @@ public class Rules : MonoBehaviour
 						othello[(int)move.x + i, (int)move.y + i] = color;
 					}
 					else if (othello[(int)move.x + i, (int)move.y + i] == color) //your color and previous wasn't
+					{
+						break;
+					}
+					else if (othello[(int)move.x + i, (int)move.y + i] == 0) //your color and previous wasn't
 					{
 						break;
 					}
