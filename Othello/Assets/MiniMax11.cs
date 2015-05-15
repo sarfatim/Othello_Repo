@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MiniMax1 : Rules 
+public class MiniMax11 : Rules 
 {
 	public int depth;
 	// Use this for initialization
@@ -14,9 +14,9 @@ public class MiniMax1 : Rules
 	// Update is called once per frame
 	void Update () 
 	{
-		if (!turn && Possible_Moves (othelloooo, color_color).Count > 0) 
+		if (turn && Possible_Moves (othelloooo, color_color).Count > 0) 
 		{
-
+			
 			int [,] board = new int[8, 8];
 			for (int l = 0; l < 8; ++l) 
 			{
@@ -31,7 +31,7 @@ public class MiniMax1 : Rules
 			best_move = (Vector3)move_list [0];
 			int best = 0;
 			int current = 0;
-
+			
 			Vector3 current_move = new Vector3 ();
 			for (int i = 0; i < move_list.Count; ++i) 
 			{
@@ -64,7 +64,7 @@ public class MiniMax1 : Rules
 			color_color = -color_color;
 		}
 	}
-
+	
 	int NaiveMiniMax(int[,] board, int depth, int new_color)
 	{
 		if (depth <= 0 || Possible_Moves(board, color_color).Count == 0) 
@@ -125,7 +125,7 @@ public class MiniMax1 : Rules
 			}
 		}
 	}
-
+	
 	int ScoreBoard(int[,] board)
 	{
 		int score = 0;

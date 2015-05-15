@@ -162,7 +162,6 @@ public class Rules : MonoBehaviour
 					}
 					else if (othello[(int)move.x, (int)move.y + i] == color && maybe) //your color and previous 
 
-wasn't
 					{
 						return true;
 					}
@@ -190,8 +189,6 @@ wasn't
 						maybe = true;
 					}
 					else if (othello[(int)move.x - i, (int)move.y] == color && maybe) //your color and previous 
-
-wasn't
 					{
 						return true;
 					}
@@ -219,8 +216,6 @@ wasn't
 						maybe = true;
 					}
 					else if (othello[(int)move.x + i, (int)move.y] == color && maybe) //your color and previous 
-
-wasn't
 					{
 						return true;
 					}
@@ -248,8 +243,6 @@ wasn't
 						maybe = true;
 					}
 					else if (othello[(int)move.x + i, (int)move.y + i] == color && maybe) //your color and previous 
-
-wasn't
 					{
 						return true;
 					}
@@ -278,7 +271,6 @@ wasn't
 					}
 					else if (othello[(int)move.x - i, (int)move.y + i] == color && maybe) //your color and previous 
 
-wasn't
 					{
 						return true;
 					}
@@ -306,8 +298,6 @@ wasn't
 						maybe = true;
 					}
 					else if (othello[(int)move.x + i, (int)move.y - i] == color && maybe) //your color and previous 
-
-wasn't
 					{
 						return true;
 					}
@@ -335,8 +325,6 @@ wasn't
 						maybe = true;
 					}
 					else if (othello[(int)move.x - i, (int)move.y - i] == color && maybe) //your color and previous 
-
-wasn't
 					{
 						return true;
 					}

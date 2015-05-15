@@ -1,12 +1,11 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Rules.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\MiniMax1.cs">
     <Files>
-      <File FileName="Assets\MiniMax1.cs" Line="115" Column="27" />
-      <File FileName="Assets\Minimax.cs" Line="14" Column="37" />
+      <File FileName="Assets\Rules.cs" Line="165" Column="1" />
+      <File FileName="Assets\MiniMax1.cs" Line="76" Column="38" />
       <File FileName="Assets\SuperSimpleAI.cs" Line="1" Column="1" />
-      <File FileName="Assets\Rules.cs" Line="423" Column="7" />
-      <File FileName="Assets\SimpleAI.cs" Line="1" Column="1" />
+      <File FileName="Assets\MiniMax11.cs" Line="35" Column="42" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
