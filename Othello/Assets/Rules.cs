@@ -9,7 +9,7 @@ public class Rules : MonoBehaviour
 	public GameObject black1;
 	public static Object[,] othe = new Object[8, 8]; //a matrix with gameobjects as a mirror. 
 	//this is just here so that the gameobjects can be destroyed.  Use the other matrix
-	public static int color = -1;
+	public static int color_color = -1;
 	public static int game_counter = 0;
 	//ArrayList possible_moves = new ArrayList();
 
@@ -41,15 +41,15 @@ public class Rules : MonoBehaviour
 		if (Input.GetKeyDown("space")) //change the turn
 		{
 			turn = !turn;
-			color = -color;
+			color_color = -color_color;
 		}
 		if (Input.GetMouseButtonDown(0) && turn) //if its your turn and you click
 		{
-			ArrayList posss = Possible_Moves(othelloooo);
+			ArrayList posss = Possible_Moves(othelloooo, color_color);
 			if (posss.Count == 0)
 			{
 				turn = !turn;
-				color = -color;
+				color_color = -color_color;
 				game_counter++;
 			}
 			else
@@ -58,14 +58,14 @@ public class Rules : MonoBehaviour
 				Vector3 vec = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 11);
 				Vector3 vvec = Culll(Camera.main.ScreenToWorldPoint(vec));
 				directionn dir = new directionn();
-				dir = Valid_Move(vvec, othelloooo);
+				dir = Valid_Move(vvec, othelloooo, color_color);
 				if (dir.maybe)//Valid_Move_White(vvec))
 				{
-					othelloooo[(int)vvec.x,(int)vvec.y] = color;
-					Calculate_Board(dir,vvec, othelloooo);
+					othelloooo[(int)vvec.x,(int)vvec.y] = color_color;
+					Calculate_Board(dir,vvec, othelloooo, color_color);
 					Place_Stuff(othelloooo);
 					turn = !turn;
-					color = -color;
+					color_color = -color_color;
 				}
 			}
 		}
@@ -119,7 +119,7 @@ public class Rules : MonoBehaviour
 		}
 	}
 
-	public bool Valid_South(Vector3 move, int[,] othello) //down is -y
+	public bool Valid_South(Vector3 move, int[,] othello, int color) //down is -y
 	{
 		bool maybe = false; //for checking
 		bool fal = false; //default return
@@ -146,7 +146,7 @@ public class Rules : MonoBehaviour
 		}
 		return fal;
 	}
-	public bool Valid_North(Vector3 move, int[,] othello) //up is y
+	public bool Valid_North(Vector3 move, int[,] othello, int color) //up is y
 	{
 		bool maybe = false; //for checking
 		bool fal = false; //default return
@@ -160,7 +160,9 @@ public class Rules : MonoBehaviour
 					{
 						maybe = true;
 					}
-					else if (othello[(int)move.x, (int)move.y + i] == color && maybe) //your color and previous wasn't
+					else if (othello[(int)move.x, (int)move.y + i] == color && maybe) //your color and previous 
+
+wasn't
 					{
 						return true;
 					}
@@ -173,7 +175,7 @@ public class Rules : MonoBehaviour
 		}
 		return fal;
 	}
-	public bool Valid_West(Vector3 move, int[,] othello) //left is -x
+	public bool Valid_West(Vector3 move, int[,] othello, int color) //left is -x
 	{
 		bool maybe = false; //for checking
 		bool fal = false; //default return
@@ -187,7 +189,9 @@ public class Rules : MonoBehaviour
 					{
 						maybe = true;
 					}
-					else if (othello[(int)move.x - i, (int)move.y] == color && maybe) //your color and previous wasn't
+					else if (othello[(int)move.x - i, (int)move.y] == color && maybe) //your color and previous 
+
+wasn't
 					{
 						return true;
 					}
@@ -200,7 +204,7 @@ public class Rules : MonoBehaviour
 		}
 		return fal;
 	}
-	public bool Valid_East(Vector3 move, int[,] othello) //right is +x
+	public bool Valid_East(Vector3 move, int[,] othello, int color) //right is +x
 	{
 		bool maybe = false; //for checking
 		bool fal = false; //default return
@@ -214,7 +218,9 @@ public class Rules : MonoBehaviour
 					{
 						maybe = true;
 					}
-					else if (othello[(int)move.x + i, (int)move.y] == color && maybe) //your color and previous wasn't
+					else if (othello[(int)move.x + i, (int)move.y] == color && maybe) //your color and previous 
+
+wasn't
 					{
 						return true;
 					}
@@ -227,7 +233,7 @@ public class Rules : MonoBehaviour
 		}
 		return fal;
 	}
-	public bool Valid_NorthEast(Vector3 move, int[,] othello) //up right is +x+y
+	public bool Valid_NorthEast(Vector3 move, int[,] othello, int color) //up right is +x+y
 	{
 		bool maybe = false; //for checking
 		bool fal = false; //default return
@@ -241,7 +247,9 @@ public class Rules : MonoBehaviour
 					{
 						maybe = true;
 					}
-					else if (othello[(int)move.x + i, (int)move.y + i] == color && maybe) //your color and previous wasn't
+					else if (othello[(int)move.x + i, (int)move.y + i] == color && maybe) //your color and previous 
+
+wasn't
 					{
 						return true;
 					}
@@ -254,7 +262,7 @@ public class Rules : MonoBehaviour
 		}
 		return fal;
 	}
-	public bool Valid_NorthWest(Vector3 move, int[,] othello) //up left is -x+y
+	public bool Valid_NorthWest(Vector3 move, int[,] othello, int color) //up left is -x+y
 	{
 		bool maybe = false; //for checking
 		bool fal = false; //default return
@@ -268,7 +276,9 @@ public class Rules : MonoBehaviour
 					{
 						maybe = true;
 					}
-					else if (othello[(int)move.x - i, (int)move.y + i] == color && maybe) //your color and previous wasn't
+					else if (othello[(int)move.x - i, (int)move.y + i] == color && maybe) //your color and previous 
+
+wasn't
 					{
 						return true;
 					}
@@ -281,7 +291,7 @@ public class Rules : MonoBehaviour
 		}
 		return fal;
 	}	
-	public bool Valid_SouthEast(Vector3 move, int[,] othello) //down right is +x-y
+	public bool Valid_SouthEast(Vector3 move, int[,] othello, int color) //down right is +x-y
 	{
 		bool maybe = false; //for checking
 		bool fal = false; //default return
@@ -295,7 +305,9 @@ public class Rules : MonoBehaviour
 					{
 						maybe = true;
 					}
-					else if (othello[(int)move.x + i, (int)move.y - i] == color && maybe) //your color and previous wasn't
+					else if (othello[(int)move.x + i, (int)move.y - i] == color && maybe) //your color and previous 
+
+wasn't
 					{
 						return true;
 					}
@@ -308,7 +320,7 @@ public class Rules : MonoBehaviour
 		}
 		return fal;
 	}
-	public bool Valid_SouthWest(Vector3 move, int[,] othello) //down left is -x-y
+	public bool Valid_SouthWest(Vector3 move, int[,] othello, int color) //down left is -x-y
 	{
 		bool maybe = false; //for checking
 		bool fal = false; //default return
@@ -322,7 +334,9 @@ public class Rules : MonoBehaviour
 					{
 						maybe = true;
 					}
-					else if (othello[(int)move.x - i, (int)move.y - i] == color && maybe) //your color and previous wasn't
+					else if (othello[(int)move.x - i, (int)move.y - i] == color && maybe) //your color and previous 
+
+wasn't
 					{
 						return true;
 					}
@@ -336,47 +350,46 @@ public class Rules : MonoBehaviour
 		return fal;
 	}
 	
-	public directionn Valid_Move(Vector3 move, int[,] othello)
+	public directionn Valid_Move(Vector3 move, int[,] othello, int color)
 	{
 		directionn dir = new directionn();
-		dir.start ();
 		
-		if (Valid_South(move, othello))
+		if (Valid_South(move, othello, color))
 		{
 			dir.maybe = true;
 			dir.down = true;
 		}
-		if (Valid_West(move, othello))
+		if (Valid_West(move, othello, color))
 		{
 			dir.maybe = true;
 			dir.left = true;
 		}
-		if (Valid_East(move, othello))
+		if (Valid_East(move, othello, color))
 		{
 			dir.maybe = true;
 			dir.right = true;
 		}
-		if (Valid_North(move, othello))
+		if (Valid_North(move, othello, color))
 		{
 			dir.maybe = true;
 			dir.up = true;
 		}
-		if (Valid_SouthWest(move, othello))
+		if (Valid_SouthWest(move, othello, color))
 		{
 			dir.maybe = true;
 			dir.left_down = true;
 		}
-		if (Valid_NorthEast(move, othello))
+		if (Valid_NorthEast(move, othello, color))
 		{
 			dir.maybe = true;
 			dir.right_up = true;
 		}
-		if (Valid_SouthEast(move, othello))
+		if (Valid_SouthEast(move, othello, color))
 		{
 			dir.maybe = true;
 			dir.right_down = true;
 		}
-		if (Valid_NorthWest(move, othello))
+		if (Valid_NorthWest(move, othello, color))
 		{
 			dir.maybe = true;
 			dir.left_up = true;
@@ -384,14 +397,14 @@ public class Rules : MonoBehaviour
 		return dir;
 	}
 
-	public ArrayList Possible_Moves(int[,] othello)
+	public ArrayList Possible_Moves(int[,] othello, int color)
 	{
 		ArrayList pos_mov = new ArrayList ();
 		for(int i = 0; i < 8; i++)
 		{
 			for (int j = 0; j < 8; j++)
 			{
-				if (Valid_Move(new Vector3(i,j,0), othello).maybe)
+				if (Valid_Move(new Vector3(i,j,0), othello, color).maybe)
 				{
 					pos_mov.Add(new Vector3(i,j,0));
 				}
@@ -401,7 +414,7 @@ public class Rules : MonoBehaviour
 		return pos_mov;
 	}
 
-	public void Calculate_Board(directionn dir, Vector3 move, int[,] othello) //takes a move, flips the tiles necessary
+	public void Calculate_Board(directionn dir, Vector3 move, int[,] othello, int color) //takes a move, flips the tiles necessary
 	{
 		if (dir.up)
 		{
@@ -414,10 +427,6 @@ public class Rules : MonoBehaviour
 						othello[(int)move.x, (int)move.y + i] = color;
 					}
 					else if (othello[(int)move.x, (int)move.y + i] == color) //your color and previous wasn't
-					{
-						break;
-					}
-					else if (othello[(int)move.x, (int)move.y + i] == 0) //your color and previous wasn't
 					{
 						break;
 					}
@@ -438,10 +447,6 @@ public class Rules : MonoBehaviour
 					{
 						break;
 					}
-					else if (othello[(int)move.x, (int)move.y - i] == 0) //your color and previous wasn't
-					{
-						break;
-					}
 				}
 			}
 		}
@@ -456,10 +461,6 @@ public class Rules : MonoBehaviour
 						othello[(int)move.x - i, (int)move.y] = color;
 					}
 					else if (othello[(int)move.x - i, (int)move.y] == color) //your color and previous wasn't
-					{
-						break;
-					}
-					else if (othello[(int)move.x - i, (int)move.y] == 0) //your color and previous wasn't
 					{
 						break;
 					}
@@ -480,10 +481,6 @@ public class Rules : MonoBehaviour
 					{
 						break;
 					}
-					else if (othello[(int)move.x + i, (int)move.y ] == 0) //your color and previous wasn't
-					{
-						break;
-					}
 				}
 			}
 		}
@@ -498,10 +495,6 @@ public class Rules : MonoBehaviour
 						othello[(int)move.x - i, (int)move.y - i] = color;
 					}
 					else if (othello[(int)move.x - i, (int)move.y - i] == color) //your color and previous wasn't
-					{
-						break;
-					}
-					else if (othello[(int)move.x - i, (int)move.y - i] == 0) //your color and previous wasn't
 					{
 						break;
 					}
@@ -522,10 +515,6 @@ public class Rules : MonoBehaviour
 					{
 						break;
 					}
-					else if (othello[(int)move.x - i, (int)move.y + i] == 0) //your color and previous wasn't
-					{
-						break;
-					}
 				}
 			}
 		}
@@ -543,10 +532,6 @@ public class Rules : MonoBehaviour
 					{
 						break;
 					}
-					else if (othello[(int)move.x + i, (int)move.y - i] == 0) //your color and previous wasn't
-					{
-						break;
-					}
 				}
 			}
 		}
@@ -561,10 +546,6 @@ public class Rules : MonoBehaviour
 						othello[(int)move.x + i, (int)move.y + i] = color;
 					}
 					else if (othello[(int)move.x + i, (int)move.y + i] == color) //your color and previous wasn't
-					{
-						break;
-					}
-					else if (othello[(int)move.x + i, (int)move.y + i] == 0) //your color and previous wasn't
 					{
 						break;
 					}

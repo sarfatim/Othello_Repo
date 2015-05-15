@@ -17,19 +17,28 @@ public class SuperSimpleAI : Rules
 		if (!turn)
 		{
 			ArrayList listy = new ArrayList ();
-			listy = Possible_Moves (othelloooo);
-			int rand = Random.Range (0, listy.Count);
-			Vector3 move = (Vector3)listy[rand];
-			directionn dire = new directionn();
-			dire = Valid_Move(move, othelloooo);
-			if (dire.maybe)
+			listy = Possible_Moves (othelloooo, color_color);
+			Debug.Log("Available moves: " + listy.Count);
+			if (listy.Count != 0)
 			{
-				Debug.Log("Making a move");
-				othelloooo[(int)move.x,(int)move.y] = color;
-				Calculate_Board(dire,move, othelloooo);
-				Place_Stuff(othelloooo);
+				int rand = Random.Range (0, listy.Count);
+				Vector3 move = (Vector3)listy[rand];
+				directionn dire = new directionn();
+				dire = Valid_Move(move, othelloooo, color_color);
+				if (dire.maybe)
+				{
+					Debug.Log("Making a move");
+					othelloooo[(int)move.x,(int)move.y] = color_color;
+					Calculate_Board(dire, move, othelloooo, color_color);
+					Place_Stuff(othelloooo);
+					turn = !turn;
+					color_color = -color_color;
+				}
+			}
+			else
+			{
+				color_color = -color_color;
 				turn = !turn;
-				color = -color;
 			}
 		}
 	}

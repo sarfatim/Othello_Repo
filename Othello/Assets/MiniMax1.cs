@@ -3,7 +3,7 @@ using System.Collections;
 
 public class MiniMax1 : Rules 
 {
-	public int depth = 5;
+	public int depth;
 	// Use this for initialization
 	void Start () 
 	{
@@ -14,7 +14,7 @@ public class MiniMax1 : Rules
 	// Update is called once per frame
 	void Update () 
 	{
-		if (!turn && Possible_Moves (othelloooo).Count > 0) 
+		if (!turn && Possible_Moves (othelloooo, color_color).Count > 0) 
 		{
 
 			int [,] board = new int[8, 8];
@@ -26,7 +26,7 @@ public class MiniMax1 : Rules
 				}
 			}
 			ArrayList move_list = new ArrayList ();
-			move_list = Possible_Moves (board);
+			move_list = Possible_Moves (board, color_color);
 			Vector3 best_move = new Vector3 ();
 			best_move = (Vector3)move_list [0];
 			int best = 0;
@@ -43,9 +43,9 @@ public class MiniMax1 : Rules
 					}
 				}
 				current_move = (Vector3)move_list [i];
-				board [(int)current_move.x, (int)current_move.y] = color;
-				Calculate_Board (Valid_Move (current_move, board), current_move, board);
-				current = NaiveMiniMax (board, depth, color);
+				board [(int)current_move.x, (int)current_move.y] =  color_color;
+				Calculate_Board (Valid_Move (current_move, board, color_color), current_move, board, color_color);
+				current = NaiveMiniMax (board, depth, color_color);
 				if (current < best) 
 				{
 					best = current;
@@ -53,15 +53,15 @@ public class MiniMax1 : Rules
 				}
 			}
 			Calculate_Board (Valid_Move (best_move, othelloooo), best_move, othelloooo);
-			othelloooo [(int)best_move.x, (int)best_move.y] = color;
+			othelloooo [(int)best_move.x, (int)best_move.y] = color_color;
 			Place_Stuff (othelloooo);
-			color = -color;
+			color_color = -color_color;
 			turn = !turn;
 		} 
-		else if (!turn && Possible_Moves (othelloooo).Count == 0)
+		else if (!turn && Possible_Moves (othelloooo, color_color).Count == 0)
 		{
 			turn = !turn;
-			color = -color;
+			color_color = -color_color;
 		}
 	}
 
@@ -108,7 +108,7 @@ public class MiniMax1 : Rules
 						best_score = -infinity;
 						new_board = board;
 						new_board[(int)move.x,(int)move.y] = new_color;
-						Calculate_Board(Valid_Move(move, new_board), move, new_board);
+						Calculate_Board(Valid_Move(move, new_board, new_color), move, new_board, new_color);
 						score = NaiveMiniMax(new_board, depth -1, -new_color);
 						if (score > best_score)
 						{
