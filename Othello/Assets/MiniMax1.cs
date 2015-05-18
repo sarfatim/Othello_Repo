@@ -4,8 +4,16 @@ using System.Collections;
 public class MiniMax1 : Rules 
 {
 	public int depth;
-	public int[,] disk_square_simple = {{99, -8, 8, 6, 6, 8, -8, 99}, {-8,-24,-4,-3,-3,-4,-24,-8},{8,-4,7,4,4,7,-4,8},{6,-3,4,0,0,4,-3,6}
-		,{6,-3,4,0,0,4,-3,6}, {8,-4,7,4,4,7,-4,8}, {-8,-24,-4,-3,-3,-4,-24,-8},{99,-8,8,6,6,8,-8,99}};
+	public int[,] disk_square_simple = 
+		{{99,-8,8,6,6,8,-8,99}, 
+		{-8,-24,-4,-3,-3,-4,-24,-8},
+		{8,-4,7,4,4,7,-4,8},
+		{6,-3,4,0,0,4,-3,6},
+		{6,-3,4,0,0,4,-3,6}, 
+		{8,-4,7,4,4,7,-4,8}, 
+		{-8,-24,-4,-3,-3,-4,-24,-8},
+		{99,-8,8,6,6,8,-8,99}};
+	public int heur;
 	// Use this for initialization
 	void Start () 
 	{
@@ -47,7 +55,7 @@ public class MiniMax1 : Rules
 				current_move = (Vector3)move_list [i];
 				board [(int)current_move.x, (int)current_move.y] =  color_color;
 				Calculate_Board (Valid_Move (current_move, board, color_color), current_move, board, color_color);
-				current = NaiveMiniMax (board, depth, color_color);
+				current = NaiveMiniMax (board, depth, color_color, current_move);
 				if (current < best) 
 				{
 					best = current;
@@ -67,11 +75,11 @@ public class MiniMax1 : Rules
 		}
 	}
 
-	int NaiveMiniMax(int[,] board, int depth, int new_color)
+	int NaiveMiniMax(int[,] board, int depth, int new_color, Vector3 orig_move)
 	{
 		if (depth <= 0 || Possible_Moves(board, color_color).Count == 0) 
 		{
-			return ScoreBoard (board);
+			return ScoreBoard (board, orig_move);
 		} 
 		else 
 		{
@@ -93,7 +101,7 @@ public class MiniMax1 : Rules
 						new_board = board;
 						new_board[(int)move.x,(int)move.y] = new_color;
 						Calculate_Board(Valid_Move(move, new_board, color_color), move, new_board, color_color);
-						score = NaiveMiniMax(new_board, depth -1, -new_color);
+						score = NaiveMiniMax(new_board, depth -1, -new_color, orig_move);
 						if (score < best_score)
 						{
 							best_score = score;
@@ -111,7 +119,7 @@ public class MiniMax1 : Rules
 						new_board = board;
 						new_board[(int)move.x,(int)move.y] = new_color;
 						Calculate_Board(Valid_Move(move, new_board, new_color), move, new_board, new_color);
-						score = NaiveMiniMax(new_board, depth -1, -new_color);
+						score = NaiveMiniMax(new_board, depth -1, -new_color, orig_move);
 						if (score > best_score)
 						{
 							best_score = score;
@@ -123,25 +131,37 @@ public class MiniMax1 : Rules
 			}
 			else
 			{
-				return ScoreBoard(board);
+				return ScoreBoard(board, orig_move);
 			}
 		}
 	}
 
-	int ScoreBoard(int[,] board)
+	int ScoreBoard(int[,] board, Vector3 move) //0 is simple minimax, 1 is disc-square, 2 is mobility
 	{
+		int score = 0;
 		int score_me = 0;
 		int score_you = 0;
-//		for (int i = 0; i < 8; ++i) 
-//		{
-//			for (int j= 0; j < 8; ++j)
-//			{
-//				score += board[i,j];
-//			}
-//		}
-		score_me = Possible_Moves(board, color_color).Count;
-		score_you = Possible_Moves(board, -color_color).Count;
-
-		return score_me - score_you;
+		if (heur == 0)
+		{
+			for (int i = 0; i < 8; ++i) 
+			{
+				for (int j= 0; j < 8; ++j)
+				{
+					score += board[i,j];
+				}
+			}
+		}
+		else if (heur == 1)
+		{
+			score = -1 * disk_square_simple[(int)move.x, (int)move.y];
+		}
+		else if (heur == 2)
+		{
+			score_me = Possible_Moves(board, color_color).Count;
+			score_you = Possible_Moves(board, -color_color).Count;
+			score = score_me - score_you;
+		}
+		return score;
 	}
 }
+			
