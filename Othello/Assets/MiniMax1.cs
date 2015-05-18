@@ -128,14 +128,18 @@ public class MiniMax1 : Rules
 
 	int ScoreBoard(int[,] board)
 	{
-		int score = 0;
-		for (int i = 0; i < 8; ++i) 
-		{
-			for (int j= 0; j < 8; ++j)
-			{
-				score += board[i,j];
-			}
-		}
-		return score;
+		int score_me = 0;
+		int score_you = 0;
+//		for (int i = 0; i < 8; ++i) 
+//		{
+//			for (int j= 0; j < 8; ++j)
+//			{
+//				score += board[i,j];
+//			}
+//		}
+		score_me = Possible_Moves(board, color_color).Count;
+		score_you = Possible_Moves(board, -color_color).Count;
+
+		return score_me - score_you;
 	}
 }
