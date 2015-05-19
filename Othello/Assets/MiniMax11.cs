@@ -58,7 +58,7 @@ public class MiniMax11 : Rules
 			color_color = -color_color;
 			turn = !turn;
 		} 
-		else if (!turn && Possible_Moves (othelloooo, color_color).Count == 0)
+		else if (turn && Possible_Moves (othelloooo, color_color).Count == 0)
 		{
 			turn = !turn;
 			color_color = -color_color;

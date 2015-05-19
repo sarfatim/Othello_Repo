@@ -11,6 +11,7 @@ public class Rules : MonoBehaviour
 	//this is just here so that the gameobjects can be destroyed.  Use the other matrix
 	public static int color_color = -1;
 	public static int game_counter = 0;
+	bool game_over = false;
 	//ArrayList possible_moves = new ArrayList();
 
 	void Start () //SOME THINGS ARE UPSIDE DOWN, MAY OR MAY NOT NEED FIXING
@@ -38,6 +39,27 @@ public class Rules : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
+		if (Possible_Moves(othelloooo, 1).Count == 0 && Possible_Moves(othelloooo, -1).Count == 0 && !game_over)
+		{
+			int black = 0;
+			int white = 0;
+			for (int i = 0; i < 8; i++)
+			{
+				for (int j = 0; j < 8; j++)
+				{
+					if (othelloooo[i,j] == 1)
+					{
+						white++;
+					}
+					else
+					{
+						black++;
+					}
+				}
+			}
+			Debug.Log("White: " + white + " Black: " + black);
+			game_over = true;
+		}
 		if (Input.GetKeyDown("space")) //change the turn
 		{
 			turn = !turn;
