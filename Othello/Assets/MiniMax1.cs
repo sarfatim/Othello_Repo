@@ -27,6 +27,7 @@ public class MiniMax1 : Rules
 	{
 		if (!turn && Possible_Moves (othelloooo, color_color).Count > 0) 
 		{
+			depth = depth1;
 
 			int [,] board = new int[8, 8];
 			for (int l = 0; l < 8; ++l) 
@@ -58,7 +59,7 @@ public class MiniMax1 : Rules
 					bread_crumbs.Add(current_move);
 				board [(int)current_move.x, (int)current_move.y] =  color_color;
 				Calculate_Board (Valid_Move (current_move, board, color_color), current_move, board, color_color);
-				current = NaiveMiniMax (board, depth, color_color, bread_crumbs);
+				current = NaiveMiniMax (board, depth1, color_color, bread_crumbs);
 				bread_crumbs.Remove(0);
 				if (current < best) 
 				{
@@ -81,7 +82,7 @@ public class MiniMax1 : Rules
 
 	int NaiveMiniMax(int[,] board, int depthy, int new_color, ArrayList bread_crumbs)
 	{
-		if (depth <= 0 || Possible_Moves(board, color_color).Count == 0) 
+		if (depthy <= 0 || Possible_Moves(board, color_color).Count == 0) 
 		{
 			return ScoreBoard (board, bread_crumbs);
 		} 
@@ -107,7 +108,7 @@ public class MiniMax1 : Rules
 						Calculate_Board(Valid_Move(move, new_board, color_color), move, new_board, color_color);
 						bread_crumbs.Add(move);
 						//int hold = bread_crumbs.Count - 1;
-						score = NaiveMiniMax(new_board, depth -1, -new_color, bread_crumbs);
+						score = NaiveMiniMax(new_board, depthy -1, -new_color, bread_crumbs);
 						bread_crumbs.Remove(move);
 						if (score < best_score)
 						{
@@ -128,7 +129,7 @@ public class MiniMax1 : Rules
 						Calculate_Board(Valid_Move(move, new_board, new_color), move, new_board, new_color);
 						//bread_crumbs.Add(new Vector3(4,4,0)); //has a value of 0
 						int hold = bread_crumbs.Count - 1;
-						score = NaiveMiniMax(new_board, depth -1, -new_color, bread_crumbs);
+						score = NaiveMiniMax(new_board, depthy -1, -new_color, bread_crumbs);
 						//bread_crumbs.Remove(hold);
 						if (score > best_score)
 						{
@@ -151,7 +152,7 @@ public class MiniMax1 : Rules
 		float score = 0.0f;
 		int score_me = 0;
 		int score_you = 0;
-		if (heur == 0)
+		if (heur == 0)		//minimax
 		{
 			for (int i = 0; i < 8; ++i) 
 			{
@@ -161,28 +162,28 @@ public class MiniMax1 : Rules
 				}
 			}
 		}
-		else if (heur == 1)
+		else if (heur == 1)	//disc-square recursive
 		{
 			//score = -1 * disk_square_simple[(int)move.x, (int)move.y];
 			for (int i = 0; i < bread_crumbs.Count; i++)
 			{
-				Debug.Log(bread_crumbs.Count);
+				//Debug.Log(bread_crumbs.Count);
 				Vector3 move = (Vector3)bread_crumbs[i];
 				score -= disk_square_simple[(int)move.x, (int)move.y];
 			}
 		}
-		else if (heur == 2)
+		else if (heur == 2)	//mobility simple
 		{
 			score_me = Possible_Moves(board, color_color).Count;
 			score_you = Possible_Moves(board, -color_color).Count;
 			score = score_me - score_you;
 		}
-		else if (heur == 4)
+		else if (heur == 4)	//disc-squre simple
 		{
 			Vector3 move = (Vector3)bread_crumbs[0];
 			score -= disk_square_simple[(int)move.x, (int)move.y];
 		}
-		else if (heur == 5)
+		else if (heur == 5)	//combined heuristic
 		{
 			float score1 = 0.0f;
 			float score2 = 0.0f;
@@ -191,17 +192,17 @@ public class MiniMax1 : Rules
 			{
 				for (int j= 0; j < 8; ++j)
 				{
-					score1 += board[i,j];
+					score1 += board[i,j]; //a is minimax
 				}
 			}
 			for (int i = 0; i < bread_crumbs.Count; i++)
 			{
 				Vector3 move = (Vector3)bread_crumbs[i];
-				score2 -= disk_square_simple[(int)move.x, (int)move.y];
+				score2 -= disk_square_simple[(int)move.x, (int)move.y];  //b is disc square
 			}
 			score_me = Possible_Moves(board, color_color).Count;
 			score_you = Possible_Moves(board, -color_color).Count;
-			score3 = score_me - score_you;
+			score3 = score_me - score_you;  //c is mobility
 
 			score = a*score1 + b*score2 + c*score3;
 		}

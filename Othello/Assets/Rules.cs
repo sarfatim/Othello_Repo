@@ -12,6 +12,13 @@ public class Rules : MonoBehaviour
 	public static int color_color = -1;
 	public static int game_counter = 0;
 	bool game_over = false;
+
+	public int blackwins;
+	public int whitewins;
+	public bool reset = false;
+	public int reset_counter;
+	public int reset_max = 10;
+	public static int depth1 = 15;
 	//ArrayList possible_moves = new ArrayList();
 
 	void Start () //SOME THINGS ARE UPSIDE DOWN, MAY OR MAY NOT NEED FIXING
@@ -51,7 +58,7 @@ public class Rules : MonoBehaviour
 					{
 						white++;
 					}
-					else
+					else if (othelloooo[i,j] == -1)
 					{
 						black++;
 					}
@@ -59,6 +66,10 @@ public class Rules : MonoBehaviour
 			}
 			Debug.Log("White: " + white + " Black: " + black);
 			game_over = true;
+			if(reset && reset_counter < reset_max)
+			{
+				reset_board();
+			}
 		}
 		if (Input.GetKeyDown("space")) //change the turn
 		{
@@ -91,6 +102,37 @@ public class Rules : MonoBehaviour
 				}
 			}
 		}
+	}
+
+	public void reset_board()
+	{
+		int score = 0;
+		for (int i = 0; i < 8; i++)
+		{
+			for (int j = 0; j < 8; j++)
+			{
+				score += othelloooo[i,j];
+				othelloooo[i,j] = 0;
+				Destroy(othe[i,j]);
+			}
+		}
+		othelloooo [3,3] = -1;
+		othelloooo [4,4] = -1;
+		othelloooo [3,4] = 1;
+		othelloooo [4,3] = 1;
+		Place_Stuff(othelloooo);
+		//StartCoroutine (waitasec);
+		if (score > 0)
+		{
+			whitewins++;
+		}
+		else if (score < 0)
+		{
+			blackwins++;
+		}
+		reset_counter++;
+		depth1++;
+		game_over = false;
 	}
 
 	public bool on_board(Vector3 move)
@@ -582,6 +624,13 @@ public class Rules : MonoBehaviour
 		//int[,] otho = new int[8, 8];
 		//otho = Matrix_Flip (othello);
 		othelloooo = board;
+		for (int i = 0; i < 8; i++)
+		{
+			for (int j = 0; j < 8; j++)
+			{
+				othelloooo[i,j] = board[i,j];
+			}
+		}
 
 		for (int i = 0; i <8; i++) 
 		{
