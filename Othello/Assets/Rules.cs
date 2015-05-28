@@ -18,7 +18,7 @@ public class Rules : MonoBehaviour
 	public bool reset = false;
 	public int reset_counter;
 	public int reset_max = 10;
-	public static int depth1 = 15;
+	public static int depth1 = 35;
 	//ArrayList possible_moves = new ArrayList();
 
 	void Start () //SOME THINGS ARE UPSIDE DOWN, MAY OR MAY NOT NEED FIXING

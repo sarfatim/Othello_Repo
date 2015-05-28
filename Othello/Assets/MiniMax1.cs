@@ -80,7 +80,7 @@ public class MiniMax1 : Rules
 		}
 	}
 
-	int NaiveMiniMax(int[,] board, int depthy, int new_color, ArrayList bread_crumbs)
+	public int NaiveMiniMax(int[,] board, int depthy, int new_color, ArrayList bread_crumbs)
 	{
 		if (depthy <= 0 || Possible_Moves(board, color_color).Count == 0) 
 		{
@@ -128,7 +128,7 @@ public class MiniMax1 : Rules
 						new_board[(int)move.x,(int)move.y] = new_color;
 						Calculate_Board(Valid_Move(move, new_board, new_color), move, new_board, new_color);
 						//bread_crumbs.Add(new Vector3(4,4,0)); //has a value of 0
-						int hold = bread_crumbs.Count - 1;
+						//int hold = bread_crumbs.Count - 1;
 						score = NaiveMiniMax(new_board, depthy -1, -new_color, bread_crumbs);
 						//bread_crumbs.Remove(hold);
 						if (score > best_score)
@@ -147,7 +147,7 @@ public class MiniMax1 : Rules
 		}
 	}
 
-	int ScoreBoard(int[,] board, ArrayList bread_crumbs) //0 is simple minimax, 1 is disc-square, 2 is mobility
+	public int ScoreBoard(int[,] board, ArrayList bread_crumbs) //0 is simple minimax, 1 is disc-square, 2 is mobility
 	{
 		float score = 0.0f;
 		int score_me = 0;

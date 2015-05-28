@@ -46,6 +46,7 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\GeneticAlgorithm.cs" />
      <Compile Include="Assets\MiniMax1.cs" />
      <Compile Include="Assets\MiniMax11.cs" />
      <Compile Include="Assets\Rules.cs" />
