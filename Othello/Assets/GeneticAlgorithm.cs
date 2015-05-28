@@ -14,11 +14,150 @@ public class GeneticAlgorithm : MiniMax1
 		//bool turn;
 	};
 
+	public struct winners
+	{
+		public othello_bot bot_a;
+		public othello_bot bot_b;
+	};
+
 	void Start () 
 	{
 		white1 = GameObject.Find("white");
 		black1 = GameObject.Find("black");
 		//initialize 20 random vector4's
+
+		winners champions = new winners();
+		champions = artificial_selection ();
+		othello_bot[] list_2 = new othello_bot[20];
+		list_2 = generate_children (champions);
+	}
+
+	othello_bot[] generate_children(winners parents)
+	{
+		int siblings = 4;
+		othello_bot[] family = new othello_bot[siblings];
+		for (int i = 0; i < siblings; i++)
+		{
+			int inheriting = (int)Random.Range(0,2); //which parent gets inherited
+			int which_value = (int)Random.Range(0,4);//which value gets inherited
+			int leftover = (int)Random.Range(0,2);
+			if (which_value == 0) //
+			{
+				if (inheriting == 0)
+				{
+					family[i].values[0] = parents.bot_a.values[0];
+				}
+				else 
+				{
+					family[i].values[0] = parents.bot_b.values[0];
+				}
+				if (leftover == 0)
+				{
+					family[i].values[1] = Random.Range(0,100-family[i].values[0]);
+					family[i].values[2] = 100 - family[i].values[1] - family[i].values[0];
+				}
+				else
+				{
+					family[i].values[2] = Random.Range(0,100-family[i].values[0]);
+					family[i].values[1] = 100 - family[i].values[2] - family[i].values[0];
+				}
+			}
+			else if (which_value == 1) //inherit b
+			{
+				if (inheriting == 0)
+				{
+					family[i].values[1] = parents.bot_a.values[1];
+				}
+				else 
+				{
+					family[i].values[1] = parents.bot_b.values[1];
+				}
+				if (leftover == 0)
+				{
+					family[i].values[0] = Random.Range(0,100-family[i].values[1]);
+					family[i].values[2] = 100 - family[i].values[0] - family[i].values[1];
+				}
+				else
+				{
+					family[i].values[2] = Random.Range(0,100-family[i].values[1]);
+					family[i].values[0] = 100 - family[i].values[2] - family[i].values[1];
+				}			
+			}
+			else if (which_value == 2) //third inherits
+			{
+				if (inheriting == 0)
+				{
+					family[i].values[2] = parents.bot_a.values[2];
+				}
+				else 
+				{
+					family[i].values[2] = parents.bot_b.values[2];
+				}
+				if (leftover == 0)
+				{
+					family[i].values[1] = Random.Range(0,100-family[i].values[2]);
+					family[i].values[0] = 100 - family[i].values[1] - family[i].values[2];
+				}
+				else
+				{
+					family[i].values[0] = Random.Range(0,100-family[i].values[2]);
+					family[i].values[1] = 100 - family[i].values[2] - family[i].values[0];
+				}
+			}
+			else //everything is random
+			{
+				int temp = Random.Range(0,3);
+				float rand = Random.Range(0,100);
+				if (temp == 0)
+				{
+					family[i].values[0] = rand;
+					if (leftover == 0)
+					{
+						family[i].values[1] = Random.Range(0,100-family[i].values[0]);
+						family[i].values[2] = 100 - family[i].values[1] - family[i].values[0];
+					}
+					else
+					{
+						family[i].values[2] = Random.Range(0,100-family[i].values[0]);
+						family[i].values[1] = 100 - family[i].values[2] - family[i].values[0];
+					}
+				}
+				else if (temp == 1)
+				{
+					family[i].values[1] = rand;
+					if (leftover == 0)
+					{
+						family[i].values[0] = Random.Range(0,100-family[i].values[1]);
+						family[i].values[2] = 100 - family[i].values[0] - family[i].values[1];
+					}
+					else
+					{
+						family[i].values[2] = Random.Range(0,100-family[i].values[1]);
+						family[i].values[0] = 100 - family[i].values[2] - family[i].values[1];
+					}		
+				}
+				else if (temp == 2)
+				{
+					family[i].values[2] = rand;
+					if (leftover == 0)
+					{
+						family[i].values[1] = Random.Range(0,100-family[i].values[2]);
+						family[i].values[0] = 100 - family[i].values[1] - family[i].values[2];
+					}
+					else
+					{
+						family[i].values[0] = Random.Range(0,100-family[i].values[2]);
+						family[i].values[1] = 100 - family[i].values[2] - family[i].values[0];
+					}	
+				}
+			}
+
+		}
+		return family;
+	}
+
+	winners artificial_selection()
+	{
 		for (int i = 0; i < 20; i++)
 		{
 			float a = Random.Range(0,100.1f);		//first value
@@ -28,18 +167,18 @@ public class GeneticAlgorithm : MiniMax1
 			float c = 100 - a - b;					//third value
 			//Debug.Log(c);
 			int d = Random.Range(1,40);				//depth (doesn't really need to be higher than 40)
-
+			
 			//random order
 			Vector4 greg = new Vector4(-1,-1,-1,0);
 			int posit = (int)Random.Range(0,3);
 			greg[posit] = a;
 			bool one = false;
-
+			
 			for (int k = 0; k < 3; k++)
 			{
 				if (greg[k] == -1 && !one)
 				{
-					greg[k] = b + .001f;
+					greg[k] = b;
 					one = true;
 					//Debug.Log("this is b");
 				}
@@ -54,19 +193,50 @@ public class GeneticAlgorithm : MiniMax1
 			botter.values = greg;
 			botter.num_wins = 0;
 			ai_list.SetValue(botter,i);
-
+			
 		}
-		bot_war (0, 1);
-		bot_war (1, 0);
-		bot_war(1, 2);
-		bot_war(0,2);
-		bot_war(2, 1);
-		bot_war(2, 0);
+		for (int i = 0; i < 4; i++)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				if (i > j)
+				{
+					bot_war(i,j);
+					bot_war(j,i);
+				}
+			}
+		}
+		//		bot_war (0, 1);
+		//		bot_war (1, 0);
+		//		bot_war(1, 2);
+		//		bot_war(0,2);
+		//		bot_war(2, 1);
+		//		bot_war(2, 0);
 		Debug.Log("First Bot: " + ai_list[0].num_wins);
 		Debug.Log("Second Bot: " + ai_list[1].num_wins);
 		Debug.Log("Third Bot: " + ai_list[2].num_wins);
+		Debug.Log("Fourth Bot: " + ai_list[3].num_wins);
+
+		winners heroes = new winners ();
+		heroes.bot_a.num_wins = 0;
+		heroes.bot_b.num_wins = 0;
+
+		for (int i = 0; i < 20; i++)
+		{
+			if (ai_list[i].num_wins > heroes.bot_a.num_wins)
+			{
+				heroes.bot_a = ai_list[i];
+			}
+			else if (ai_list[i].num_wins > heroes.bot_b.num_wins)
+			{
+				heroes.bot_b = ai_list[i];
+			}
+		}
+		return heroes;
 	}
-	
+
+
+
 	// Update is called once per frame
 	void bot_war (int bot1, int bot2) 
 	{
@@ -334,8 +504,8 @@ public class GeneticAlgorithm : MiniMax1
 		return (int)score;
 	}
 	//0. ***generate 20 ai's
-	//1. play ((20 * 20) - 20) * 2 games, where each ai gets a turn as each color against each other ai
-	//2. choose the two ai's with the highest win rates.
+	//1. ***play ((20 * 20) - 20) * 2 games, where each ai gets a turn as each color against each other ai
+	//2. ***choose the two ai's with the highest win rates.
 	//3. randomly choose the values to keep from the array of combinations
 	//4. play ((10 * 10) - 10) * 2 games
 	//5. choose the two ai's with the highest win rates
