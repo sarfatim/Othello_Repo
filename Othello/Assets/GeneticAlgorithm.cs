@@ -3,7 +3,7 @@ using System.Collections;
 
 public class GeneticAlgorithm : MiniMax1 
 {
-	othello_bot[] ai_list = new othello_bot[20];
+	public othello_bot[] ai_list = new othello_bot[20];
 	// Use this for initialization
 
 	public struct othello_bot
@@ -11,7 +11,7 @@ public class GeneticAlgorithm : MiniMax1
 		public Vector4 values;
 		public int num_wins;
 		public bool am_white;
-		bool turn;
+		//bool turn;
 	};
 
 	void Start () 
@@ -56,12 +56,19 @@ public class GeneticAlgorithm : MiniMax1
 			ai_list.SetValue(botter,i);
 
 		}
-		Debug.Log (ai_list [0].values);
-		bot_war (ai_list [0], ai_list [1]);
+		bot_war (0, 1);
+		bot_war (1, 0);
+		bot_war(1, 2);
+		bot_war(0,2);
+		bot_war(2, 1);
+		bot_war(2, 0);
+		Debug.Log("First Bot: " + ai_list[0].num_wins);
+		Debug.Log("Second Bot: " + ai_list[1].num_wins);
+		Debug.Log("Third Bot: " + ai_list[2].num_wins);
 	}
 	
 	// Update is called once per frame
-	void bot_war (othello_bot bot1, othello_bot bot2) 
+	void bot_war (int bot1, int bot2) 
 	{
 		bool game_is_over = false;
 		bool game_maybe_over = false;
@@ -101,7 +108,7 @@ public class GeneticAlgorithm : MiniMax1
 					bread_crumbs.Add(current_move);
 					board [(int)current_move.x, (int)current_move.y] =  color_color;
 					Calculate_Board (Valid_Move (current_move, board, color_color), current_move, board, color_color);
-					current = NaiveMiniMax (board, (int)bot1.values[3], color_color, bread_crumbs);
+					current = NaiveMiniMax (board, (int)ai_list[bot1].values[3], color_color, bread_crumbs);
 					bread_crumbs.Remove(0);
 					if (current < best) 
 					{
@@ -113,18 +120,19 @@ public class GeneticAlgorithm : MiniMax1
 				othelloooo [(int)best_move.x, (int)best_move.y] = color_color;
 				Place_Stuff (othelloooo);
 				color_color = -color_color;
-				turn = !turn;
+				//turn = !turn;
 				game_maybe_over = false;
 			} 
 			else if (Possible_Moves (othelloooo, color_color).Count == 0 && game_maybe_over)
 			{
-				turn = !turn;
+				//turn = !turn;
 				color_color = -color_color;
 				game_is_over = true;
 			}
 			else if (Possible_Moves (othelloooo, color_color).Count == 0 && !game_maybe_over)
 			{
 				game_maybe_over = true;
+				color_color = -color_color;
 			}
 			if (Possible_Moves (othelloooo, color_color).Count > 0) //player two
 			{
@@ -160,7 +168,7 @@ public class GeneticAlgorithm : MiniMax1
 					bread_crumbs.Add(current_move);
 					board [(int)current_move.x, (int)current_move.y] =  color_color;
 					Calculate_Board (Valid_Move (current_move, board, color_color), current_move, board, color_color);
-					current = NaiveMiniMax (board, (int)bot2.values[3], color_color, bread_crumbs);
+					current = NaiveMiniMax (board, (int)ai_list[bot2].values[3], color_color, bread_crumbs);
 					bread_crumbs.Remove(0);
 					if (current < best) 
 					{
@@ -172,21 +180,39 @@ public class GeneticAlgorithm : MiniMax1
 				othelloooo [(int)best_move.x, (int)best_move.y] = color_color;
 				Place_Stuff (othelloooo);
 				color_color = -color_color;
-				turn = !turn;
+				//turn = !turn;
 				game_maybe_over = false;
 			} 
 			else if (Possible_Moves (othelloooo, color_color).Count == 0 && game_maybe_over)
 			{
-				turn = !turn;
+				//turn = !turn;
 				color_color = -color_color;
 				game_is_over = true;
 			}
 			else if (Possible_Moves (othelloooo, color_color).Count == 0 && !game_maybe_over)
 			{
 				game_maybe_over = true;
+				color_color = -color_color;
 			}
 		}
-
+		int score = 0;
+		for (int i = 0; i < 8; ++i)
+		{
+			for (int j = 0; j < 8; j++)
+			{
+				score += othelloooo[i,j];
+			}
+		}
+		if (score > 0)
+		{
+			ai_list[bot2].num_wins++;
+		}
+		else if (score < 0)
+		{
+			ai_list[bot1].num_wins++;
+		}
+		show_score();
+		reset_board();
 	}
 
 	public int NaiveMiniMax(int[,] board, int depthy, int new_color, ArrayList bread_crumbs, othello_bot bott)
@@ -255,7 +281,28 @@ public class GeneticAlgorithm : MiniMax1
 			}
 		}
 	}
-	
+
+	public void show_score()
+	{
+		int black = 0;
+		int white = 0;
+		for (int i = 0; i < 8; i++)
+		{
+			for (int j = 0; j < 8; j++)
+			{
+				if (othelloooo[i,j] == 1)
+				{
+					white++;
+				}
+				else if (othelloooo[i,j] == -1)
+				{
+					black++;
+				}
+			}
+		}
+		Debug.Log("White: " + white + " Black: " + black);
+	}
+
 	public int ScoreBoard(int[,] board, ArrayList bread_crumbs, othello_bot boot) //0 is simple minimax, 1 is disc-square, 2 is mobility
 	{
 		float score = 0.0f;

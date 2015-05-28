@@ -64,7 +64,7 @@ public class Rules : MonoBehaviour
 					}
 				}
 			}
-			Debug.Log("White: " + white + " Black: " + black);
+			//Debug.Log("White: " + white + " Black: " + black);
 			game_over = true;
 			if(reset && reset_counter < reset_max)
 			{
