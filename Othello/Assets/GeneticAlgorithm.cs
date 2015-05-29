@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.IO;
 
 public class GeneticAlgorithm : MiniMax1 
 {
@@ -28,8 +29,31 @@ public class GeneticAlgorithm : MiniMax1
 
 		winners champions = new winners();
 		champions = artificial_selection ();
-		othello_bot[] list_2 = new othello_bot[20];
-		list_2 = generate_children (champions);
+		//ai_list = new othello_bot[4];
+		for (int i = 0; i < 10; i++)
+		{
+			ai_list = generate_children (champions);  //might have problems here
+			champions = deathmatch (ai_list);
+		}
+	}
+
+	void last_battle(winners finalists)
+	{
+		othello_bot victor = new othello_bot ();
+		othello_bot[] last_chance = new othello_bot[2];
+		last_chance [0] = finalists.bot_a;
+		last_chance [1] = finalists.bot_b;
+		bot_war (0, 1, last_chance);
+		bot_war (1, 0, last_chance);
+		if (last_chance [0].num_wins > last_chance [1].num_wins)
+			victor = last_chance [0];
+		else
+			victor = last_chance [1];
+
+		StreamWriter sr = File.CreateText("CHAMPION.txt");
+		sr.WriteLine (victor.values);
+		//sr.WriteLine ("I can write ints {0} or floats {1}, and so on.", 1, 4.2);
+		sr.Close();
 	}
 
 	othello_bot[] generate_children(winners parents)
@@ -201,8 +225,8 @@ public class GeneticAlgorithm : MiniMax1
 			{
 				if (i > j)
 				{
-					bot_war(i,j);
-					bot_war(j,i);
+					bot_war(i,j,null);
+					bot_war(j,i,null);
 				}
 			}
 		}
@@ -221,7 +245,7 @@ public class GeneticAlgorithm : MiniMax1
 		heroes.bot_a.num_wins = 0;
 		heroes.bot_b.num_wins = 0;
 
-		for (int i = 0; i < 20; i++)
+		for (int i = 0; i < ai_list.Length; i++)
 		{
 			if (ai_list[i].num_wins > heroes.bot_a.num_wins)
 			{
@@ -235,11 +259,44 @@ public class GeneticAlgorithm : MiniMax1
 		return heroes;
 	}
 
-
+	winners deathmatch(othello_bot[] gladiators)
+	{
+		for (int i = 0; i < 4; i++)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				if (i > j)
+				{
+					bot_war(i, j, gladiators);
+					bot_war(j, i, gladiators);
+				}
+			}
+		}
+		winners heroes = new winners ();
+		heroes.bot_a.num_wins = 0;
+		heroes.bot_b.num_wins = 0;
+		
+		for (int i = 0; i < 4; i++)
+		{
+			if (ai_list[i].num_wins > heroes.bot_a.num_wins)
+			{
+				heroes.bot_a = ai_list[i];
+			}
+			else if (ai_list[i].num_wins > heroes.bot_b.num_wins)
+			{
+				heroes.bot_b = ai_list[i];
+			}
+		}
+		return heroes;
+	}
 
 	// Update is called once per frame
-	void bot_war (int bot1, int bot2) 
+	void bot_war (int bot1, int bot2, othello_bot[] bot_list) 
 	{
+		if (bot_list != null)
+		{
+			ai_list = bot_list;	//might have problems
+		}
 		bool game_is_over = false;
 		bool game_maybe_over = false;
 		while(!game_is_over)
@@ -384,6 +441,8 @@ public class GeneticAlgorithm : MiniMax1
 		show_score();
 		reset_board();
 	}
+
+
 
 	public int NaiveMiniMax(int[,] board, int depthy, int new_color, ArrayList bread_crumbs, othello_bot bott)
 	{
