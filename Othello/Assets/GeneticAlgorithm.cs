@@ -35,6 +35,7 @@ public class GeneticAlgorithm : MiniMax1
 			ai_list = generate_children (champions);  //might have problems here
 			champions = deathmatch (ai_list);
 		}
+		last_battle (champions);
 	}
 
 	void last_battle(winners finalists)
@@ -65,6 +66,7 @@ public class GeneticAlgorithm : MiniMax1
 			int inheriting = (int)Random.Range(0,2); //which parent gets inherited
 			int which_value = (int)Random.Range(0,4);//which value gets inherited
 			int leftover = (int)Random.Range(0,2);
+			int which_depth = (int)Random.Range(0,3);
 			if (which_value == 0) //
 			{
 				if (inheriting == 0)
@@ -175,7 +177,18 @@ public class GeneticAlgorithm : MiniMax1
 					}	
 				}
 			}
-
+			if (which_depth == 0)
+			{
+				family[i].values[3] = parents.bot_a.values[3];
+			}
+			else if (which_depth == 1)
+			{
+				family[i].values[3] = parents.bot_b.values[3];
+			}
+			else
+			{
+				family[i].values[3] = Random.Range(1,40);
+			}
 		}
 		return family;
 	}
