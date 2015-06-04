@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.IO;
 
 public class Rules : MonoBehaviour 
 {
@@ -17,8 +18,8 @@ public class Rules : MonoBehaviour
 	public int whitewins;
 	public bool reset = false;
 	public int reset_counter;
-	public int reset_max = 10;
-	public static int depth1 = 35;
+	public int reset_max;
+	public static int depth1;
 	//ArrayList possible_moves = new ArrayList();
 
 	void Start ()
@@ -60,6 +61,21 @@ public class Rules : MonoBehaviour
 					{
 						black++;
 					}
+				}
+			}
+			using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"C:\Users\Eric\Desktop\Results\Results.txt",true))
+			{
+				if (white > black)
+				{
+					file.WriteLine("White");
+				}
+				else if (black > white)
+				{
+					file.WriteLine("Black");
+				}
+				else
+				{
+					file.WriteLine("Draw");
 				}
 			}
 			Debug.Log("White: " + white + " Black: " + black);
@@ -129,7 +145,7 @@ public class Rules : MonoBehaviour
 			blackwins++;
 		}
 		reset_counter++;
-		depth1++;
+		depth1 += 5;
 		game_over = false;
 	}
 
