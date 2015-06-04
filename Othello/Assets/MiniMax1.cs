@@ -15,7 +15,7 @@ public class MiniMax1 : Rules
 		{-8,-24,-4,-3,-3,-4,-24,-8},
 		{99,-8,8,6,6,8,-8,99}};
 	public int heur;
-	// Use this for initialization
+
 	void Start () 
 	{
 		white1 = GameObject.Find("white");
@@ -107,7 +107,6 @@ public class MiniMax1 : Rules
 						new_board[(int)move.x,(int)move.y] = new_color;
 						Calculate_Board(Valid_Move(move, new_board, color_color), move, new_board, color_color);
 						bread_crumbs.Add(move);
-						//int hold = bread_crumbs.Count - 1;
 						score = NaiveMiniMax(new_board, depthy -1, -new_color, bread_crumbs);
 						bread_crumbs.Remove(move);
 						if (score < best_score)
@@ -116,7 +115,6 @@ public class MiniMax1 : Rules
 						}
 					}
 					return best_score;
-					// return min(minimax(node, depth -1)
 				}
 				else 			// black == min
 				{
@@ -127,17 +125,13 @@ public class MiniMax1 : Rules
 						new_board = board;
 						new_board[(int)move.x,(int)move.y] = new_color;
 						Calculate_Board(Valid_Move(move, new_board, new_color), move, new_board, new_color);
-						//bread_crumbs.Add(new Vector3(4,4,0)); //has a value of 0
-						//int hold = bread_crumbs.Count - 1;
 						score = NaiveMiniMax(new_board, depthy -1, -new_color, bread_crumbs);
-						//bread_crumbs.Remove(hold);
 						if (score > best_score)
 						{
 							best_score = score;
 						}
 					}
 					return best_score;
-					// return max(minimax(node, depth -1)
 				}
 			}
 			else
@@ -152,7 +146,7 @@ public class MiniMax1 : Rules
 		float score = 0.0f;
 		int score_me = 0;
 		int score_you = 0;
-		if (heur == 0)		//minimax
+		if (heur == 0)		//simple minimax
 		{
 			for (int i = 0; i < 8; ++i) 
 			{
@@ -164,10 +158,8 @@ public class MiniMax1 : Rules
 		}
 		else if (heur == 1)	//disc-square recursive
 		{
-			//score = -1 * disk_square_simple[(int)move.x, (int)move.y];
 			for (int i = 0; i < bread_crumbs.Count; i++)
 			{
-				//Debug.Log(bread_crumbs.Count);
 				Vector3 move = (Vector3)bread_crumbs[i];
 				score -= disk_square_simple[(int)move.x, (int)move.y];
 			}
@@ -178,7 +170,7 @@ public class MiniMax1 : Rules
 			score_you = Possible_Moves(board, -color_color).Count;
 			score = score_me - score_you;
 		}
-		else if (heur == 4)	//disc-squre simple
+		else if (heur == 4)	//disk-square simple
 		{
 			Vector3 move = (Vector3)bread_crumbs[0];
 			score -= disk_square_simple[(int)move.x, (int)move.y];
@@ -206,7 +198,6 @@ public class MiniMax1 : Rules
 
 			score = a*score1 + b*score2 + c*score3;
 		}
-		//Debug.Log (score);
 		return (int)score;
 	}
 }

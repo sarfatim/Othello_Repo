@@ -4,7 +4,7 @@ using System.IO;
 
 public class GeneticAlgorithm : MiniMax1 
 {
-	public othello_bot[] ai_list = new othello_bot[20];
+	public othello_bot[] ai_list = new othello_bot[50];
 	// Use this for initialization
 
 	public struct othello_bot
@@ -53,13 +53,12 @@ public class GeneticAlgorithm : MiniMax1
 
 		StreamWriter sr = File.CreateText("CHAMPION.txt");
 		sr.WriteLine (victor.values);
-		//sr.WriteLine ("I can write ints {0} or floats {1}, and so on.", 1, 4.2);
 		sr.Close();
 	}
 
 	othello_bot[] generate_children(winners parents)
 	{
-		int siblings = 4;
+		int siblings = 50;
 		othello_bot[] family = new othello_bot[siblings];
 		for (int i = 0; i < siblings; i++)
 		{
@@ -198,11 +197,11 @@ public class GeneticAlgorithm : MiniMax1
 		for (int i = 0; i < 20; i++)
 		{
 			float a = Random.Range(0,100.1f);		//first value
-			//Debug.Log("a is: " + a);
+
 			float b = Random.Range(0,100-a);		//second value
-			//Debug.Log(b);
+
 			float c = 100 - a - b;					//third value
-			//Debug.Log(c);
+
 			int d = Random.Range(1,40);				//depth (doesn't really need to be higher than 40)
 			
 			//random order
@@ -217,12 +216,10 @@ public class GeneticAlgorithm : MiniMax1
 				{
 					greg[k] = b;
 					one = true;
-					//Debug.Log("this is b");
 				}
 				else if (greg[k] == -1 && one)
 				{
 					greg[k] = c;
-					//Debug.Log("this is c");
 				}
 			}
 			greg[3] = d;
@@ -243,17 +240,6 @@ public class GeneticAlgorithm : MiniMax1
 				}
 			}
 		}
-		//		bot_war (0, 1);
-		//		bot_war (1, 0);
-		//		bot_war(1, 2);
-		//		bot_war(0,2);
-		//		bot_war(2, 1);
-		//		bot_war(2, 0);
-		Debug.Log("First Bot: " + ai_list[0].num_wins);
-		Debug.Log("Second Bot: " + ai_list[1].num_wins);
-		Debug.Log("Third Bot: " + ai_list[2].num_wins);
-		Debug.Log("Fourth Bot: " + ai_list[3].num_wins);
-
 		winners heroes = new winners ();
 		heroes.bot_a.num_wins = 0;
 		heroes.bot_b.num_wins = 0;
@@ -303,7 +289,6 @@ public class GeneticAlgorithm : MiniMax1
 		return heroes;
 	}
 
-	// Update is called once per frame
 	void bot_war (int bot1, int bot2, othello_bot[] bot_list) 
 	{
 		if (bot_list != null)
@@ -315,9 +300,7 @@ public class GeneticAlgorithm : MiniMax1
 		while(!game_is_over)
 		{
 			if (Possible_Moves (othelloooo, color_color).Count > 0) //player one
-			{
-				//depth = depth1;
-				
+			{	
 				int [,] board = new int[8, 8];
 				for (int l = 0; l < 8; ++l) 
 				{
@@ -360,12 +343,10 @@ public class GeneticAlgorithm : MiniMax1
 				othelloooo [(int)best_move.x, (int)best_move.y] = color_color;
 				Place_Stuff (othelloooo);
 				color_color = -color_color;
-				//turn = !turn;
 				game_maybe_over = false;
 			} 
 			else if (Possible_Moves (othelloooo, color_color).Count == 0 && game_maybe_over)
 			{
-				//turn = !turn;
 				color_color = -color_color;
 				game_is_over = true;
 			}
@@ -375,9 +356,7 @@ public class GeneticAlgorithm : MiniMax1
 				color_color = -color_color;
 			}
 			if (Possible_Moves (othelloooo, color_color).Count > 0) //player two
-			{
-				//depth = depth1;
-				
+			{	
 				int [,] board = new int[8, 8];
 				for (int l = 0; l < 8; ++l) 
 				{
@@ -420,12 +399,10 @@ public class GeneticAlgorithm : MiniMax1
 				othelloooo [(int)best_move.x, (int)best_move.y] = color_color;
 				Place_Stuff (othelloooo);
 				color_color = -color_color;
-				//turn = !turn;
 				game_maybe_over = false;
 			} 
 			else if (Possible_Moves (othelloooo, color_color).Count == 0 && game_maybe_over)
 			{
-				//turn = !turn;
 				color_color = -color_color;
 				game_is_over = true;
 			}
@@ -455,8 +432,6 @@ public class GeneticAlgorithm : MiniMax1
 		reset_board();
 	}
 
-
-
 	public int NaiveMiniMax(int[,] board, int depthy, int new_color, ArrayList bread_crumbs, othello_bot bott)
 	{
 		if (depthy <= 0 || Possible_Moves(board, color_color).Count == 0) 
@@ -484,7 +459,6 @@ public class GeneticAlgorithm : MiniMax1
 						new_board[(int)move.x,(int)move.y] = new_color;
 						Calculate_Board(Valid_Move(move, new_board, color_color), move, new_board, color_color);
 						bread_crumbs.Add(move);
-						//int hold = bread_crumbs.Count - 1;
 						score = NaiveMiniMax(new_board, depthy -1, -new_color, bread_crumbs);
 						bread_crumbs.Remove(move);
 						if (score < best_score)
@@ -493,7 +467,6 @@ public class GeneticAlgorithm : MiniMax1
 						}
 					}
 					return best_score;
-					// return min(minimax(node, depth -1)
 				}
 				else 			// black == min
 				{
@@ -504,17 +477,13 @@ public class GeneticAlgorithm : MiniMax1
 						new_board = board;
 						new_board[(int)move.x,(int)move.y] = new_color;
 						Calculate_Board(Valid_Move(move, new_board, new_color), move, new_board, new_color);
-						//bread_crumbs.Add(new Vector3(4,4,0)); //has a value of 0
-						//int hold = bread_crumbs.Count - 1;
 						score = NaiveMiniMax(new_board, depthy -1, -new_color, bread_crumbs);
-						//bread_crumbs.Remove(hold);
 						if (score > best_score)
 						{
 							best_score = score;
 						}
 					}
 					return best_score;
-					// return max(minimax(node, depth -1)
 				}
 			}
 			else
@@ -598,20 +567,3 @@ public class GeneticAlgorithm : MiniMax1
 	//the third value is 1 - a - b
 
 }
-
-/*
- * 1 2 3 4 5 6 7 8
- * 12 13 14 16 17 18
- * 23 24 25 27 28
- * 34 35 36 38 39
- * 45 46 47
- * 56 57 58
- * 67 68
- * 78
- * 123 124 127 128
- * 523 524 527 528
- * 163 164 167 168
- * 563 564 567 568
- * 234 238 274 278
- * 634 638 674 678
- * */

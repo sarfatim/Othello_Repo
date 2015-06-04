@@ -21,7 +21,7 @@ public class Rules : MonoBehaviour
 	public static int depth1 = 35;
 	//ArrayList possible_moves = new ArrayList();
 
-	void Start () //SOME THINGS ARE UPSIDE DOWN, MAY OR MAY NOT NEED FIXING
+	void Start ()
 	{
 		white1 = GameObject.Find("white");
 		black1 = GameObject.Find("black");
@@ -37,8 +37,6 @@ public class Rules : MonoBehaviour
 		othelloooo [4,4] = -1;
 		othelloooo [3,4] = 1;
 		othelloooo [4,3] = 1;
-		//othelloooo [0, 0] = -1;
-
 
 		Place_Stuff (othelloooo);
 	}
@@ -64,7 +62,7 @@ public class Rules : MonoBehaviour
 					}
 				}
 			}
-			//Debug.Log("White: " + white + " Black: " + black);
+			Debug.Log("White: " + white + " Black: " + black);
 			game_over = true;
 			if(reset && reset_counter < reset_max)
 			{
@@ -606,23 +604,8 @@ public class Rules : MonoBehaviour
 		}
 	}
 
-//	int[,] Matrix_Flip(int[,] matt)
-//	{
-//		int[,] matthew = new int[8, 8];
-//		for (int i = 0; i < 8; i++)
-//		{
-//			for (int j = 0; j < 8; j++)
-//			{
-//				matthew[i,j] = matt[i, 7-j];
-//			}
-//		}
-//		return matthew;
-//	}
-
 	public void Place_Stuff(int[,] board)  //use this after a valid move has been made, and the matrix updated
 	{
-		//int[,] otho = new int[8, 8];
-		//otho = Matrix_Flip (othello);
 		othelloooo = board;
 		for (int i = 0; i < 8; i++)
 		{
