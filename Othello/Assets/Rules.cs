@@ -19,11 +19,11 @@ public class Rules : MonoBehaviour
 	public bool reset = false;
 	public int reset_counter;
 	public int reset_max;
-	public static int depth1;
+	public static int depth1 = 5;
 
 	public int reset_counter_2;
 	public int reset_max_2;
-	public static int depth2;
+	public static int depth2 = 5;
 	//ArrayList possible_moves = new ArrayList();
 
 	void Start ()
@@ -67,7 +67,7 @@ public class Rules : MonoBehaviour
 					}
 				}
 			}
-			using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"C:\Users\Michael Sarfati\Desktop\Results.txt",true))
+			using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"C:\Users\Eric\Desktop\Results\Results.txt",true))
 			{
 				if (white > black)
 				{
@@ -90,18 +90,19 @@ public class Rules : MonoBehaviour
 				{
 					reset_board();
 					reset_counter_2++;
-					depth2 += 5;
+					depth2 += 15;
 				}
 				else
 				{
-					reset_board();
 					reset_counter_2 = 0;
+					depth2 = 5;
 					reset_counter++;
 					depth1 += 5;
-					using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"C:\Users\Michael Sarfati\Desktop\Results.txt",true))
+					using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"C:\Users\Eric\Desktop\Results\Results.txt",true))
 					{
 						file.WriteLine("________depth = " + depth1);
 					}
+					reset_board();
 				}
 			}
 		}

@@ -59,7 +59,7 @@ public class MiniMax1 : Rules
 					bread_crumbs.Add(current_move);
 				board [(int)current_move.x, (int)current_move.y] =  color_color;
 				Calculate_Board (Valid_Move (current_move, board, color_color), current_move, board, color_color);
-				current = NaiveMiniMax (board, depth1, color_color, bread_crumbs);
+				current = NaiveMiniMax (board, depth, color_color, bread_crumbs);
 				bread_crumbs.Remove(0);
 				if (current < best) 
 				{
@@ -158,10 +158,12 @@ public class MiniMax1 : Rules
 		}
 		else if (heur == 1)	//disc-square recursive
 		{
-			for (int i = 0; i < bread_crumbs.Count; i++)
+			for (int i = 0; i < 8; i++)
 			{
-				Vector3 move = (Vector3)bread_crumbs[i];
-				score -= disk_square_simple[(int)move.x, (int)move.y];
+				for (int j = 0; j < 8; ++j)
+				{
+					score += disk_square_simple[i,j] * board[i,j];
+				}
 			}
 		}
 		else if (heur == 2)	//mobility simple
