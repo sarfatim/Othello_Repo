@@ -27,7 +27,7 @@ public class MiniMax11 : Rules
 	{
 		if (turn && Possible_Moves (othelloooo, color_color).Count > 0) 
 		{
-			depth = depth1;
+			depth = depth2;
 			
 			int [,] board = new int[8, 8];
 			for (int l = 0; l < 8; ++l) 
@@ -59,7 +59,7 @@ public class MiniMax11 : Rules
 				bread_crumbs.Add(current_move);
 				board [(int)current_move.x, (int)current_move.y] =  color_color;
 				Calculate_Board (Valid_Move (current_move, board, color_color), current_move, board, color_color);
-				current = NaiveMiniMax (board, depth1, color_color, bread_crumbs);
+				current = NaiveMiniMax (board, depth2, color_color, bread_crumbs);
 				bread_crumbs.Remove(0);
 				if (current < best) 
 				{

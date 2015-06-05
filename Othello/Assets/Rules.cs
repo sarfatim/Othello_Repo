@@ -20,6 +20,10 @@ public class Rules : MonoBehaviour
 	public int reset_counter;
 	public int reset_max;
 	public static int depth1;
+
+	public int reset_counter_2;
+	public int reset_max_2;
+	public static int depth2;
 	//ArrayList possible_moves = new ArrayList();
 
 	void Start ()
@@ -63,7 +67,7 @@ public class Rules : MonoBehaviour
 					}
 				}
 			}
-			using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"C:\Users\Eric\Desktop\Results\Results.txt",true))
+			using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"C:\Users\Michael Sarfati\Desktop\Results.txt",true))
 			{
 				if (white > black)
 				{
@@ -82,7 +86,19 @@ public class Rules : MonoBehaviour
 			game_over = true;
 			if(reset && reset_counter < reset_max)
 			{
-				reset_board();
+				if (reset && reset_counter_2 < reset_max_2)
+				{
+					reset_board();
+					reset_counter_2++;
+					depth2 += 5;
+				}
+				else
+				{
+					reset_board();
+					reset_counter_2 = 0;
+					reset_counter++;
+					depth1 += 5;
+				}
 			}
 		}
 		if (Input.GetKeyDown("space")) //change the turn
@@ -144,8 +160,8 @@ public class Rules : MonoBehaviour
 		{
 			blackwins++;
 		}
-		reset_counter++;
-		depth1 += 5;
+		//reset_counter++;
+		//depth1 += 5;
 		game_over = false;
 	}
 
