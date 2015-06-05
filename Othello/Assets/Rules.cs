@@ -98,6 +98,10 @@ public class Rules : MonoBehaviour
 					reset_counter_2 = 0;
 					reset_counter++;
 					depth1 += 5;
+					using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"C:\Users\Michael Sarfati\Desktop\Results.txt",true))
+					{
+						file.WriteLine("________depth = " + depth1);
+					}
 				}
 			}
 		}
