@@ -67,21 +67,21 @@ public class Rules : MonoBehaviour
 					}
 				}
 			}
-			using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"C:\Users\Eric\Desktop\Results\Results.txt",true))
-			{
-				if (white > black)
-				{
-					file.WriteLine("White");
-				}
-				else if (black > white)
-				{
-					file.WriteLine("Black");
-				}
-				else
-				{
-					file.WriteLine("Draw");
-				}
-			}
+//			using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"C:\Users\Michael Sarfati\Desktop\Results.txt",true))
+//			{
+//				if (white > black)
+//				{
+//					file.WriteLine("White");
+//				}
+//				else if (black > white)
+//				{
+//					file.WriteLine("Black");
+//				}
+//				else
+//				{
+//					file.WriteLine("Draw");
+//				}
+//			}
 			Debug.Log("White: " + white + " Black: " + black);
 			game_over = true;
 			if(reset && reset_counter < reset_max)
@@ -90,7 +90,7 @@ public class Rules : MonoBehaviour
 				{
 					reset_board();
 					reset_counter_2++;
-					depth2 += 15;
+					depth2 += 5;
 				}
 				else
 				{
@@ -98,10 +98,10 @@ public class Rules : MonoBehaviour
 					depth2 = 5;
 					reset_counter++;
 					depth1 += 5;
-					using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"C:\Users\Eric\Desktop\Results\Results.txt",true))
-					{
-						file.WriteLine("________depth = " + depth1);
-					}
+//					using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"C:\Users\Michael Sarfati\Desktop\Results.txt",true))
+//					{
+//						file.WriteLine("________depth = " + depth1);
+//					}
 					reset_board();
 				}
 			}
